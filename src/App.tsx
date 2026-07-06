@@ -5,15 +5,138 @@ import redLogo from './assets/RED-AP.png'
 import './App.css'
 
 export default function App() {
-  const [activeColor, setActiveColor] = useState<'red' | 'gray'>('red');
+  const [activeColor, setActiveColor] = useState<'red' | 'gray'>('red')
+  const [statusMessage, setStatusMessage] = useState<string>('Waking up the server, hang tight...')
+
+  // Resolve the target Render URL
+  const getRenderUrl = () => {
+    const params = new URLSearchParams(window.location.search)
+    const targetParam = params.get('render') || params.get('target') || params.get('to')
+    if (targetParam) {
+      try {
+        new URL(targetParam)
+        return targetParam.replace(/\/$/, '') // Remove trailing slash
+      } catch (e) {
+        console.error('Invalid target URL from query parameter', e)
+      }
+    }
+    
+    const envUrl = import.meta.env.VITE_RENDER_URL
+    if (envUrl) {
+      return envUrl.replace(/\/$/, '')
+    }
+
+    // Default fallback for Pramuditha Nadun's portfolio on Render
+    return 'https://pramuditha-portfolio.onrender.com'
+  }
+
+  const RENDER_URL = getRenderUrl()
 
   // Smoothly toggle the active color state every 3.5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveColor((prev) => (prev === 'red' ? 'gray' : 'red'));
-    }, 3500);
-    return () => clearInterval(interval);
-  }, []);
+      setActiveColor((prev) => (prev === 'red' ? 'gray' : 'red'))
+    }, 3500)
+    return () => clearInterval(interval)
+  }, [])
+
+  // Poll the Render server health endpoint
+  useEffect(() => {
+    // 1. Check if we can skip the loading screen (if server was recently verified awake)
+    const awakeAtStr = localStorage.getItem('render_awake_at')
+    if (awakeAtStr) {
+      const awakeAt = parseInt(awakeAtStr, 10)
+      const tenMinutes = 10 * 60 * 1000 // 10 minutes session cache
+      if (Date.now() - awakeAt < tenMinutes) {
+        try {
+          const targetUrlObj = new URL(RENDER_URL)
+          const currentUrlObj = new URL(window.location.href)
+          
+          targetUrlObj.pathname = currentUrlObj.pathname
+          
+          const searchParams = new URLSearchParams(currentUrlObj.search)
+          searchParams.delete('render')
+          searchParams.delete('target')
+          searchParams.delete('to')
+          
+          const searchStr = searchParams.toString()
+          targetUrlObj.search = searchStr ? `?${searchStr}` : ''
+          
+          // Use replace to prevent back-button loops
+          window.location.replace(targetUrlObj.toString())
+          return
+        } catch (e) {
+          console.error('Error in instant redirect bypass:', e)
+        }
+      }
+    }
+
+    const POLL_INTERVAL_MS = 2500
+    const MAX_WAIT_MS = 90000 // 90 seconds timeout
+    const startTime = Date.now()
+    let timeoutId: any
+
+    const checkHealth = async () => {
+      try {
+        // Cache bust the request to make sure we don't get cached 502/504 errors from CDN
+        const checkUrl = `${RENDER_URL}/health?cb=${Date.now()}`
+        const response = await fetch(checkUrl, {
+          method: 'GET',
+          cache: 'no-store',
+          headers: {
+            'Accept': 'application/json'
+          }
+        })
+
+        if (response.ok) {
+          setStatusMessage('Ready! Redirecting...')
+          
+          // Save wake-up timestamp to localStorage (so next load within 10m is instant)
+          localStorage.setItem('render_awake_at', Date.now().toString())
+          
+          // Construct the final redirection URL:
+          // Keep the original pathname and query parameters (minus our special bypass query parameters)
+          const targetUrlObj = new URL(RENDER_URL)
+          const currentUrlObj = new URL(window.location.href)
+          
+          // Copy pathname (e.g., /projects, /developer, or /)
+          targetUrlObj.pathname = currentUrlObj.pathname
+          
+          // Copy search parameters but remove 'render', 'target', 'to', and our cache-buster
+          const searchParams = new URLSearchParams(currentUrlObj.search)
+          searchParams.delete('render')
+          searchParams.delete('target')
+          searchParams.delete('to')
+          
+          const searchStr = searchParams.toString()
+          targetUrlObj.search = searchStr ? `?${searchStr}` : ''
+          
+          // Redirect to the awake Render app (using replace so back-button works normally)
+          window.location.replace(targetUrlObj.toString())
+          return
+        }
+      } catch (error) {
+        console.error('Render wake-up check failed:', error)
+      }
+
+      // Check if we timed out or have taken longer than expected
+      const elapsed = Date.now() - startTime
+      if (elapsed > MAX_WAIT_MS) {
+        setStatusMessage('Taking longer than expected. Retrying...')
+      } else if (elapsed > 45000) {
+        setStatusMessage('Render is still spinning up, please wait...')
+      }
+
+      // Schedule next poll
+      timeoutId = setTimeout(checkHealth, POLL_INTERVAL_MS)
+    }
+
+    checkHealth()
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId)
+    }
+  }, [RENDER_URL])
 
   return (
     <>
@@ -109,6 +232,16 @@ export default function App() {
             >
               Crafting Premium Digital Experiences
             </motion.p>
+
+            <motion.p
+              className="status-text"
+              animate={{
+                color: activeColor === 'red' ? '#e52e2e' : '#a3a3c2'
+              }}
+              transition={{ duration: 2.0, ease: 'easeInOut' }}
+            >
+              {statusMessage}
+            </motion.p>
             
             <motion.div 
               className="loading-dots"
@@ -127,3 +260,4 @@ export default function App() {
     </>
   )
 }
+

@@ -172,3 +172,27 @@
     max-width: 280px;
   }
 }
+
+.status-text {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 0.3rem;
+  opacity: 0.65;
+  line-height: 1.4;
+  max-width: 300px;
+  will-change: color;
+  transition: color 2s ease;
+}
+
+@media (max-width: 480px) {
+  .status-text {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    max-width: 260px;
+  }
+}
+
