@@ -22,32 +22,41 @@
   max-width: 480px;
 }
 
-/* Logo Showcase Area */
+/* Proportional Sizing System for the Loader */
 .logo-container {
   position: relative;
-  width: 200px;
-  height: 200px;
+  /* Base size on desktop is 200px. All sub-elements scale proportionally. */
+  --logo-container-size: 200px;
+  width: var(--logo-container-size);
+  height: var(--logo-container-size);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
 }
 
+/* Responsive adjustment of the single base size variable */
+@media (max-width: 480px) {
+  .logo-container {
+    --logo-container-size: 150px;
+  }
+}
+
 .logo-glow-aura {
   position: absolute;
-  width: 160px;
-  height: 160px;
+  width: calc(var(--logo-container-size) * 0.8);
+  height: calc(var(--logo-container-size) * 0.8);
   border-radius: 50%;
   filter: blur(40px);
   z-index: -1;
-  /* Transitions handled in Framer Motion, but fallback support here */
+  /* Transitions handled in Framer Motion, fallback support here */
   transition: background-color 0.8s ease, box-shadow 0.8s ease;
 }
 
 .logo-spin-wrapper {
   position: relative;
-  width: 130px;
-  height: 130px;
+  width: calc(var(--logo-container-size) * 0.65);
+  height: calc(var(--logo-container-size) * 0.65);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -64,11 +73,11 @@
   backface-visibility: hidden;
 }
 
-/* SVG Circular Rings */
+/* SVG Circular Rings - scaled proportionally */
 .svg-ring-container {
   position: absolute;
-  width: 190px;
-  height: 190px;
+  width: calc(var(--logo-container-size) * 0.95);
+  height: calc(var(--logo-container-size) * 0.95);
   transform: rotate(-90deg);
   pointer-events: none;
 }
@@ -79,11 +88,11 @@
   stroke-width: 2;
 }
 
-/* Orbiting dots around the spinner */
+/* Orbiting dashed line - scaled proportionally */
 .ring-orbit {
   position: absolute;
-  width: 220px;
-  height: 220px;
+  width: calc(var(--logo-container-size) * 1.1);
+  height: calc(var(--logo-container-size) * 1.1);
   border: 1px dashed rgba(255, 255, 255, 0.08);
   border-radius: 50%;
   animation: orbitCounterClockwise 15s linear infinite;
@@ -155,28 +164,8 @@
   }
 }
 
-/* Responsiveness */
+/* Responsive adjusters for text elements on small viewports */
 @media (max-width: 480px) {
-  .logo-container {
-    width: 170px;
-    height: 170px;
-  }
-  
-  .logo-spin-wrapper {
-    width: 110px;
-    height: 110px;
-  }
-  
-  .svg-ring-container {
-    width: 160px;
-    height: 160px;
-  }
-
-  .ring-orbit {
-    width: 180px;
-    height: 180px;
-  }
-  
   .catchphrase-text {
     font-size: 0.72rem;
     letter-spacing: 0.2em;

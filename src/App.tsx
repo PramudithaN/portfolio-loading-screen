@@ -33,7 +33,7 @@ export default function App() {
             <div className="ring-orbit" />
 
             {/* Decorative Rings */}
-            <svg className="svg-ring-container">
+            <svg className="svg-ring-container" viewBox="0 0 190 190">
               <circle
                 className="ring-track"
                 cx="95"
