@@ -27,7 +27,7 @@ export default function App() {
     }
 
     // Default fallback for Pramuditha Nadun's portfolio on Render
-    return 'https://pramuditha-portfolio.onrender.com'
+    return 'https://pramuditha-is-a-dev.onrender.com'
   }
 
   const RENDER_URL = getRenderUrl()
