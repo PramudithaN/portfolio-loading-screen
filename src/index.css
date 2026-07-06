@@ -1,0 +1,160 @@
+:root {
+  --bg-base: #0c0b0e;
+  --bg-darker: #050406;
+  --text-primary: #f4f4f6;
+  --text-secondary: #8e8a99;
+  --red-accent: #e52e2e;
+  --red-glow: rgba(229, 46, 46, 0.15);
+  --gray-accent: #a3a3c2;
+  --gray-glow: rgba(163, 163, 194, 0.1);
+  --card-bg: rgba(18, 16, 22, 0.45);
+  --card-border: rgba(255, 255, 255, 0.04);
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-darker);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background Ambient Glows */
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background-color: var(--bg-darker);
+  pointer-events: none;
+}
+
+.ambient-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.35;
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+/* Dark Red Ambient Blob */
+.blob-red-1 {
+  width: 60vw;
+  height: 60vw;
+  max-width: 600px;
+  max-height: 600px;
+  background: radial-gradient(circle, var(--red-accent) 0%, rgba(229, 46, 46, 0) 70%);
+  top: -10%;
+  left: -10%;
+  animation: floatRed1 25s infinite alternate ease-in-out;
+}
+
+.blob-red-2 {
+  width: 50vw;
+  height: 50vw;
+  max-width: 500px;
+  max-height: 500px;
+  background: radial-gradient(circle, #8a0f0f 0%, rgba(138, 15, 15, 0) 70%);
+  bottom: -10%;
+  right: -5%;
+  animation: floatRed2 30s infinite alternate ease-in-out;
+}
+
+/* Dark Gray / Slate Ambient Blob */
+.blob-gray {
+  width: 55vw;
+  height: 55vw;
+  max-width: 550px;
+  max-height: 550px;
+  background: radial-gradient(circle, #3a3a4a 0%, rgba(58, 58, 74, 0) 75%);
+  top: 40%;
+  right: 15%;
+  animation: floatGray 28s infinite alternate ease-in-out;
+}
+
+/* Dynamic grid overlay for depth */
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
+  -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
+  pointer-events: none;
+}
+
+@keyframes floatRed1 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate(8%, 10%) scale(1.1) rotate(180deg);
+  }
+  100% {
+    transform: translate(-5%, 5%) scale(0.95) rotate(360deg);
+  }
+}
+
+@keyframes floatRed2 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-10%, -8%) scale(1.05);
+  }
+  100% {
+    transform: translate(5%, -15%) scale(0.9);
+  }
+}
+
+@keyframes floatGray {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate(-5%, 12%) scale(1.15) rotate(-120deg);
+  }
+  100% {
+    transform: translate(10%, -5%) scale(0.9) rotate(-240deg);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-darker);
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2830;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3e3a47;
+}
