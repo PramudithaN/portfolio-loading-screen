@@ -89,31 +89,37 @@ export default function App() {
         })
 
         if (response.ok) {
-          setStatusMessage('Ready! Redirecting...')
-          
-          // Save wake-up timestamp to localStorage (so next load within 10m is instant)
-          localStorage.setItem('render_awake_at', Date.now().toString())
-          
-          // Construct the final redirection URL:
-          // Keep the original pathname and query parameters (minus our special bypass query parameters)
-          const targetUrlObj = new URL(RENDER_URL)
-          const currentUrlObj = new URL(window.location.href)
-          
-          // Copy pathname (e.g., /projects, /developer, or /)
-          targetUrlObj.pathname = currentUrlObj.pathname
-          
-          // Copy search parameters but remove 'render', 'target', 'to', and our cache-buster
-          const searchParams = new URLSearchParams(currentUrlObj.search)
-          searchParams.delete('render')
-          searchParams.delete('target')
-          searchParams.delete('to')
-          
-          const searchStr = searchParams.toString()
-          targetUrlObj.search = searchStr ? `?${searchStr}` : ''
-          
-          // Redirect to the awake Render app (using replace so back-button works normally)
-          window.location.replace(targetUrlObj.toString())
-          return
+          const contentType = response.headers.get('content-type')
+          if (contentType && contentType.includes('application/json')) {
+            const data = await response.json()
+            if (data && data.status === 'ok') {
+              setStatusMessage('Ready! Redirecting...')
+              
+              // Save wake-up timestamp to localStorage (so next load within 10m is instant)
+              localStorage.setItem('render_awake_at', Date.now().toString())
+              
+              // Construct the final redirection URL:
+              // Keep the original pathname and query parameters (minus our special bypass query parameters)
+              const targetUrlObj = new URL(RENDER_URL)
+              const currentUrlObj = new URL(window.location.href)
+              
+              // Copy pathname (e.g., /projects, /developer, or /)
+              targetUrlObj.pathname = currentUrlObj.pathname
+              
+              // Copy search parameters but remove 'render', 'target', 'to', and our cache-buster
+              const searchParams = new URLSearchParams(currentUrlObj.search)
+              searchParams.delete('render')
+              searchParams.delete('target')
+              searchParams.delete('to')
+              
+              const searchStr = searchParams.toString()
+              targetUrlObj.search = searchStr ? `?${searchStr}` : ''
+              
+              // Redirect to the awake Render app (using replace so back-button works normally)
+              window.location.replace(targetUrlObj.toString())
+              return
+            }
+          }
         }
       } catch (error) {
         console.error('Render wake-up check failed:', error)
