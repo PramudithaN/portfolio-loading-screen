@@ -122,15 +122,6 @@ body {
   margin-top: 1rem;
 }
 
-.soon-label {
-  font-size: 0.65rem;
-  font-weight: 500;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
-  line-height: 1.6;
-}
-
 .brand-subtitle {
   font-size: 0.75rem;
   font-weight: 600;
@@ -177,20 +168,6 @@ body {
   text-shadow: 0 10px 45px rgba(0, 0, 0, 0.95);
 }
 
-/* Cursive Accent: Soon */
-.cursive-text {
-  font-family: var(--font-script);
-  position: absolute;
-  color: var(--accent-red-bright);
-  font-size: 5.5vw;
-  right: 16%;
-  bottom: -15%;
-  transform: rotate(-7deg);
-  z-index: 12;
-  pointer-events: none;
-  text-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
-}
-
 /* Bottom Section */
 .bottom-section {
   display: flex;
@@ -211,6 +188,7 @@ body {
   color: rgba(255, 255, 255, 0.7);
   max-width: 600px;
   margin: 0 auto;
+  text-align: justify; /* Justified text layout instead of center aligned */
 }
 
 .footer-links {
@@ -255,16 +233,11 @@ body {
     transform: scaleY(1.5);
   }
   
-  .cursive-text {
-    font-size: 10vw;
-    right: 12%;
-    bottom: -15%;
-  }
-  
   .description-text {
     font-size: 0.6rem;
     letter-spacing: 0.14em;
     padding: 0 1rem;
+    text-align: justify;
   }
   
   .footer-links {
@@ -289,11 +262,5 @@ body {
   .fg-text {
     font-size: 14vw;
     transform: scaleY(1.4);
-  }
-  
-  .cursive-text {
-    font-size: 13vw;
-    right: 6%;
-    bottom: -20%;
   }
 }

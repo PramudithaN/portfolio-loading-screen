@@ -6,7 +6,7 @@ export default function App() {
     <>
       {/* Background Lighting & Effects */}
       <div className="portfolio-bg">
-        {/* Giant background text: NADUN (Opacity set to 0.55 for perfect contrast with PRAMUDITHA) */}
+        {/* Giant background text: NADUN (Clean single string in background layer) */}
         <motion.div 
           className="bg-text"
           initial={{ opacity: 0 }}
@@ -25,10 +25,6 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
         >
-          <div className="soon-label">
-            PORTFOLIO<br />
-            HOME PAGE
-          </div>
           <div className="brand-subtitle">PRAMUDITHA NADUN 2.0.</div>
         </motion.div>
 
@@ -45,16 +41,6 @@ export default function App() {
             >
               PRAMUDITHA
             </motion.h1>
-
-            {/* Cursive overlay: Soon */}
-            <motion.span 
-              className="cursive-text"
-              initial={{ opacity: 0, scale: 0.7, rotate: -15 }}
-              animate={{ opacity: 1, scale: 1, rotate: -7 }}
-              transition={{ duration: 1.4, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
-            >
-              Soon
-            </motion.span>
           </div>
         </div>
 
