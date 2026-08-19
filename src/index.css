@@ -1,16 +1,12 @@
 :root {
-  --bg-base: #0c0b0e;
-  --bg-darker: #050406;
-  --text-primary: #f4f4f6;
-  --text-secondary: #8e8a99;
-  --red-accent: #e52e2e;
-  --red-glow: rgba(229, 46, 46, 0.15);
-  --gray-accent: #a3a3c2;
-  --gray-glow: rgba(163, 163, 194, 0.1);
-  --card-bg: rgba(18, 16, 22, 0.45);
-  --card-border: rgba(255, 255, 255, 0.04);
+  --bg-color: #000000;
+  --text-white: #ffffff;
+  --accent-red: #e51d1d;
+  --accent-red-bright: #ff3333;
+  --bg-red-glow: #8b0000;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  --font-tall: 'Bebas Neue', sans-serif;
+  --font-script: 'Pinyon Script', cursive;
 }
 
 * {
@@ -21,13 +17,15 @@
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--bg-darker);
-  color: var(--text-primary);
+  background-color: var(--bg-color);
+  color: var(--text-white);
   overflow-x: hidden;
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -38,123 +36,264 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-}
-
-/* Background Ambient Glows */
-.ambient-bg {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
+  position: relative;
   overflow: hidden;
-  background-color: var(--bg-darker);
-  pointer-events: none;
 }
 
-.ambient-blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.35;
-  mix-blend-mode: screen;
-  will-change: transform;
-}
-
-/* Dark Red Ambient Blob */
-.blob-red-1 {
-  width: 60vw;
-  height: 60vw;
-  max-width: 600px;
-  max-height: 600px;
-  background: radial-gradient(circle, var(--red-accent) 0%, rgba(229, 46, 46, 0) 70%);
-  top: -10%;
-  left: -10%;
-  animation: floatRed1 25s infinite alternate ease-in-out;
-}
-
-.blob-red-2 {
-  width: 50vw;
-  height: 50vw;
-  max-width: 500px;
-  max-height: 500px;
-  background: radial-gradient(circle, #8a0f0f 0%, rgba(138, 15, 15, 0) 70%);
-  bottom: -10%;
-  right: -5%;
-  animation: floatRed2 30s infinite alternate ease-in-out;
-}
-
-/* Dark Gray / Slate Ambient Blob */
-.blob-gray {
-  width: 55vw;
-  height: 55vw;
-  max-width: 550px;
-  max-height: 550px;
-  background: radial-gradient(circle, #3a3a4a 0%, rgba(58, 58, 74, 0) 75%);
-  top: 40%;
-  right: 15%;
-  animation: floatGray 28s infinite alternate ease-in-out;
-}
-
-/* Dynamic grid overlay for depth */
-.grid-overlay {
+/* Background Lighting & Effects */
+.portfolio-bg {
   position: fixed;
   inset: 0;
   z-index: 1;
-  background-size: 50px 50px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-  mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
-  -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
+  background-color: var(--bg-color);
   pointer-events: none;
 }
 
-@keyframes floatRed1 {
-  0% {
-    transform: translate(0, 0) scale(1) rotate(0deg);
+/* Central Red Glow */
+.portfolio-bg::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 85vw;
+  height: 85vw;
+  max-width: 1100px;
+  max-height: 1100px;
+  background: radial-gradient(circle, var(--bg-red-glow) 0%, rgba(0, 0, 0, 0) 70%);
+  opacity: 0.95;
+  z-index: 2;
+  filter: blur(40px);
+}
+
+/* Giant background text: NADUN (Stretched fully horizontally and vertically to cover screen edge-to-edge on all devices) */
+.bg-text {
+  font-family: var(--font-tall);
+  font-size: 35vw; /* Font size optimized for scaling */
+  font-weight: 400; /* Bebas Neue is naturally bold */
+  color: #920303; /* Deep solid crimson red */
+  text-transform: uppercase;
+  letter-spacing: -0.04em; /* Tight letter spacing */
+  line-height: 1; /* Prevents vertical baseline shifts of uppercase letters */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* Stretched vertically (scaleY) and horizontally (scaleX) to leave zero space on all sides of the screen */
+  transform: translate(-50%, -50%) scaleY(2.6) scaleX(1.65); 
+  transform-origin: center;
+  z-index: 3;
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0.55; /* Decreased opacity for improved contrast with the white foreground text */
+  width: 100%;
+  text-align: center;
+}
+
+/* Vignette Overlay (Ellipse gradient to prevent letter edges from being blacked out too early) */
+.portfolio-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 25%, rgba(0, 0, 0, 0.88) 100%);
+  z-index: 4;
+}
+
+/* Container */
+.portfolio-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+/* Top Section */
+.top-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.soon-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+}
+
+.brand-subtitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-white);
+  margin-top: 0.5rem;
+}
+
+/* Hero Text Section (Center) */
+.hero-section {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto 0;
+  user-select: none;
+}
+
+/* Foreground container for overlap */
+.fg-text-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  width: 100%;
+}
+
+/* White Text: PRAMUDITHA (Bebas Neue style) */
+.fg-text {
+  font-family: var(--font-tall);
+  font-size: 11vw;
+  font-weight: 400; /* Bebas Neue is naturally bold */
+  color: var(--text-white);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 0.8;
+  transform: scaleY(1.75);
+  transform-origin: center;
+  white-space: nowrap;
+  display: inline-block;
+  text-shadow: 0 10px 45px rgba(0, 0, 0, 0.95);
+}
+
+/* Cursive Accent: Soon */
+.cursive-text {
+  font-family: var(--font-script);
+  position: absolute;
+  color: var(--accent-red-bright);
+  font-size: 5.5vw;
+  right: 16%;
+  bottom: -15%;
+  transform: rotate(-7deg);
+  z-index: 12;
+  pointer-events: none;
+  text-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
+}
+
+/* Bottom Section */
+.bottom-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 1rem;
+}
+
+.description-text {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  line-height: 2;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 650px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: var(--text-white);
+  border-color: var(--text-white);
+}
+
+/* Responsive adjustments for Tablets (Portrait) */
+@media (max-width: 1024px) {
+  .portfolio-container {
+    padding: 2.5rem 1.5rem;
   }
-  50% {
-    transform: translate(8%, 10%) scale(1.1) rotate(180deg);
+  
+  .bg-text {
+    font-size: 45vh; /* Sized by height to guarantee full vertical coverage */
+    transform: translate(-50%, -50%) scaleY(2.6) scaleX(3.0); /* Stretches horizontally and vertically */
+    opacity: 0.55;
   }
-  100% {
-    transform: translate(-5%, 5%) scale(0.95) rotate(360deg);
+  
+  .fg-text {
+    font-size: 13vw;
+    transform: scaleY(1.5);
+  }
+  
+  .cursive-text {
+    font-size: 10vw;
+    right: 12%;
+    bottom: -15%;
+  }
+  
+  .description-text {
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    padding: 0 1rem;
+  }
+  
+  .footer-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
   }
 }
 
-@keyframes floatRed2 {
-  0% {
-    transform: translate(0, 0) scale(1);
+/* Responsive adjustments for Mobiles (Portrait) */
+@media (max-width: 480px) {
+  .top-section {
+    gap: 1.5rem;
   }
-  50% {
-    transform: translate(-10%, -8%) scale(1.05);
+  
+  .bg-text {
+    font-size: 42vh; /* Sized by height to guarantee full vertical coverage */
+    transform: translate(-50%, -50%) scaleY(2.4) scaleX(3.2); /* Stretches horizontally and vertically */
+    opacity: 0.55;
   }
-  100% {
-    transform: translate(5%, -15%) scale(0.9);
+  
+  .fg-text {
+    font-size: 14vw;
+    transform: scaleY(1.4);
   }
-}
-
-@keyframes floatGray {
-  0% {
-    transform: translate(0, 0) scale(1) rotate(0deg);
+  
+  .cursive-text {
+    font-size: 13vw;
+    right: 6%;
+    bottom: -20%;
   }
-  50% {
-    transform: translate(-5%, 12%) scale(1.15) rotate(-120deg);
-  }
-  100% {
-    transform: translate(10%, -5%) scale(0.9) rotate(-240deg);
-  }
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-darker);
-}
-::-webkit-scrollbar-thumb {
-  background: #2a2830;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #3e3a47;
 }
