@@ -7,6 +7,7 @@
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --font-tall: 'Bebas Neue', sans-serif;
   --font-script: 'Pinyon Script', cursive;
+  --font-wide: 'Space Grotesk', sans-serif;
 }
 
 * {
@@ -19,30 +20,51 @@ body {
   font-family: var(--font-sans);
   background-color: var(--bg-color);
   color: var(--text-white);
-  overflow-x: hidden;
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden; /* Prevent body scrolling; scroll-container handles it */
+  height: 100vh;
+  height: 100dvh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
   width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
+  height: 100%;
 }
 
-/* Background Lighting & Effects */
+/* Scroll Container for Snapping (Hides scrollbar for presentation look) */
+.scroll-container {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  position: relative;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Individual Fullscreen snap section */
+.scroll-section {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background Lighting & Effects (Now absolute within each snap section) */
 .portfolio-bg {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 1;
   background-color: var(--bg-color);
@@ -66,7 +88,7 @@ body {
   filter: blur(40px);
 }
 
-/* Giant background text: NADUN (Stretched fully horizontally and vertically to cover screen edge-to-edge on all devices) */
+/* Giant background text: NADUN (Stretched fully horizontally and vertically to cover screen edge-to-edge) */
 .bg-text {
   font-family: var(--font-tall);
   font-size: 35vw; /* Font size optimized for scaling */
@@ -110,8 +132,7 @@ body {
   position: relative;
   z-index: 10;
   width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -136,6 +157,48 @@ body {
   text-transform: uppercase;
   color: var(--text-white);
   margin-top: 0.5rem;
+}
+
+/* Header Row for Section 2 (Split subtitle and theme toggle button) */
+.top-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 950px;
+  margin-top: 1rem;
+  padding: 0 1rem;
+  z-index: 20;
+}
+
+/* Stacked Logo Style (TU RA style) */
+.stacked-logo {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-tall);
+  font-size: 1.1rem;
+  line-height: 0.9;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-align: left;
+  text-transform: uppercase;
+  color: inherit;
+}
+
+/* Theme toggle button styling */
+.theme-toggle-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 0.4rem 1.2rem;
+  border-radius: 20px;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: inherit;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Hero Text Section (Center) */
@@ -223,7 +286,357 @@ body {
   border-color: var(--text-white);
 }
 
-/* Responsive adjustments for Tablets (Portrait) - Rotates background text -90 degrees */
+/* Margins (Sidebars) */
+.left-socials-vertical {
+  position: absolute;
+  left: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  z-index: 20;
+}
+
+.left-socials-vertical a {
+  color: inherit;
+  opacity: 0.55;
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: opacity 0.3s ease;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.left-socials-vertical a:hover {
+  opacity: 1;
+}
+
+.right-scroll-vertical {
+  position: absolute;
+  right: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  writing-mode: vertical-rl;
+}
+
+/* Split Section Container */
+.scroll-section.split-scroll-section {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  position: relative;
+}
+
+/* Floating theme button inside Section 2 */
+.floating-theme-btn {
+  position: absolute;
+  top: 2.5rem;
+  right: 2.5rem;
+  z-index: 50;
+  background: none;
+  border: 1px solid rgba(17, 17, 17, 0.25);
+  padding: 0.4rem 1.2rem;
+  border-radius: 20px;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #111111;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-section.light-theme .floating-theme-btn:hover {
+  background-color: #111111;
+  color: #DDD9D4;
+  border-color: #111111;
+}
+
+.scroll-section.dark-theme .floating-theme-btn {
+  border-color: rgba(232, 227, 221, 0.3);
+  color: #E8E3DD;
+}
+
+.scroll-section.dark-theme .floating-theme-btn:hover {
+  background-color: #E8E3DD;
+  color: #0D0E11;
+  border-color: #E8E3DD;
+}
+
+/* Split half panel covering top and bottom half */
+.split-half {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-half.top-half {
+  border-bottom: 2px solid #000000; /* Solid horizontal divider line */
+}
+
+/* Hover panels background shifting */
+.scroll-section.light-theme .split-half:hover {
+  background-color: rgba(0, 0, 0, 0.035); /* More distinct clay beige hover */
+}
+
+.scroll-section.dark-theme .split-half:hover {
+  background-color: rgba(255, 255, 255, 0.03); /* Lighter slate hover */
+}
+
+/* Title wrapper to isolate SVG transforms from stretched text */
+.split-title-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Custom proportional font sizes to ensure both titles span the exact same visual width */
+.top-half .split-title-wrapper {
+  font-size: 13.2vw; /* Larger font size to compensate for fewer characters */
+}
+
+.bottom-half .split-title-wrapper {
+  font-size: 10.5vw; /* Smaller font size to compensate for more characters */
+}
+
+/* Title text inside the split panels inherits baseline scale */
+.split-half-title {
+  font-family: var(--font-tall);
+  font-size: 1em; /* Inherits from wrapper font-size */
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -0.02em; /* Tight, natural letter spacing */
+  line-height: 0.85; /* Tighter line-height to fit the vertical stretch */
+  transform: scaleY(1.9); /* Stretched further to fill the height */
+  transform-origin: center;
+  color: #111111;
+  transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  text-align: center;
+  white-space: nowrap; /* Prevent horizontal wrapping */
+}
+
+/* Sibling diagonal indicator arrow - sits outside the scale transform, keeping it perfectly square */
+.arrow-indicator {
+  width: 0.26em; /* Perfectly proportional square box */
+  height: 0.26em;
+  opacity: 0.35;
+  position: absolute;
+  right: -0.33em; /* Placed near the end of the word */
+  top: 0.05em; /* Aligned near the top baseline as a superscript */
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  color: #111111;
+}
+
+/* Hover text scaling & highlight */
+.split-half:hover .split-half-title {
+  transform: scaleY(1.95) scale(1.02);
+}
+
+.split-half:hover .arrow-indicator {
+  opacity: 1;
+  transform: translate(6px, -6px); /* Slide diagonally naturally without parent distortion */
+}
+
+.scroll-section.light-theme .split-half:hover .split-half-title {
+  color: #8C7D70; /* Light Mode hover highlight */
+}
+
+.scroll-section.dark-theme .split-half-title {
+  color: #E8E3DD;
+}
+
+.scroll-section.dark-theme .split-half:hover .split-half-title {
+  color: #C4A484; /* Dark Mode hover highlight */
+}
+
+.scroll-section.dark-theme .split-half.top-half {
+  border-bottom-color: #000000;
+}
+
+
+/* ==========================================
+   SECTION 2 - LIGHT MINIMALIST OVERRIDES
+   ========================================== */
+.scroll-section.light-theme {
+  background-color: #DDD9D4; /* Light beige/sand background */
+}
+
+.scroll-section.light-theme .portfolio-bg {
+  background-color: #DDD9D4;
+}
+
+.scroll-section.light-theme .portfolio-bg::before,
+.scroll-section.light-theme .portfolio-bg::after {
+  display: none; /* Disable dark red glow and dark vignette overlay */
+}
+
+
+/* ==========================================
+   SUBPAGE & GRID CONTAINER STYLING
+   ========================================== */
+.subpage-container {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 4rem 3rem;
+  animation: fadeInSubpage 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInSubpage {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.subpage-container.logic-subpage {
+  background-color: #DDD9D4;
+  color: #111111;
+}
+
+.subpage-container.aesthetics-subpage {
+  background-color: #DDD9D4;
+  color: #111111;
+}
+
+.subpage-title {
+  font-family: var(--font-wide);
+  font-size: 3.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 3.5rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-align: center;
+}
+
+.subpage-subtitle {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: inherit;
+  opacity: 0.65;
+  margin-bottom: 4rem;
+  text-align: center;
+}
+
+/* Subpage Work Grid */
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.2rem;
+  width: 100%;
+  max-width: 950px;
+  margin-bottom: 4rem;
+  z-index: 10;
+}
+
+/* Individual Work Card */
+.work-card {
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 2.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 240px;
+  text-align: left;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.subpage-container.logic-subpage .work-card,
+.subpage-container.aesthetics-subpage .work-card {
+  background-color: rgba(255, 255, 255, 0.45);
+  border-color: rgba(0, 0, 0, 0.07);
+}
+
+.work-card:hover {
+  transform: translateY(-6px);
+}
+
+.subpage-container.logic-subpage .work-card:hover,
+.subpage-container.aesthetics-subpage .work-card:hover {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.13);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+}
+
+.work-item-meta {
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin-bottom: 0.8rem;
+}
+
+.work-item-title {
+  font-family: var(--font-wide);
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  line-height: 1.2;
+}
+
+.work-item-desc {
+  font-size: 0.62rem;
+  font-weight: 500;
+  line-height: 1.7;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 1.5rem;
+}
+
+.work-item-tag {
+  display: inline-block;
+  border: 1px solid currentColor;
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  opacity: 0.6;
+  align-self: flex-start;
+}
+
+
+/* ==========================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================== */
+
+/* Responsive adjustments for Tablets (Portrait) */
 @media (max-width: 1024px) {
   .portfolio-container {
     padding: 2.5rem 1.5rem;
@@ -254,9 +667,58 @@ body {
     align-items: center;
     gap: 1.2rem;
   }
+  
+  .top-half .split-title-wrapper {
+    font-size: 12.6vw;
+  }
+  
+  .bottom-half .split-title-wrapper {
+    font-size: 10vw;
+  }
+  
+  .split-half-title {
+    transform: scaleY(1.6);
+  }
+  
+  .split-half:hover .split-half-title {
+    transform: scaleY(1.65) scale(1.02);
+  }
+  
+  .split-half:hover .arrow-indicator {
+    transform: translate(4px, -4px);
+  }
+  
+  /* Hides side margins on tablets */
+  .left-socials-vertical,
+  .right-scroll-vertical {
+    display: none;
+  }
+  
+  /* Light Theme Responsive Adjustments */
+  .scroll-section.light-theme .bg-text {
+    opacity: 0; /* Keep background clean on mobile light theme */
+  }
+  
+  .top-header-row {
+    padding: 0;
+  }
+  
+  /* Subpage adjustments */
+  .subpage-container {
+    padding: 3rem 1.5rem;
+  }
+  .subpage-title {
+    font-size: 2.2rem;
+    margin-top: 2.5rem;
+  }
+  .work-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    max-width: 480px;
+  }
 }
 
-/* Responsive adjustments for Mobiles (Portrait) - Rotates background text -90 degrees */
+/* Responsive adjustments for Mobiles (Portrait) */
 @media (max-width: 480px) {
   .top-section {
     gap: 1.5rem;
@@ -273,5 +735,33 @@ body {
   .fg-text {
     font-size: 14vw;
     transform: scaleY(1.4);
+  }
+  
+
+  .top-half .split-title-wrapper {
+    font-size: 13.8vw;
+  }
+  
+  .bottom-half .split-title-wrapper {
+    font-size: 11vw;
+  }
+  
+  .split-half-title {
+    transform: scaleY(1.45);
+  }
+  
+  .split-half:hover .split-half-title {
+    transform: scaleY(1.5) scale(1.01);
+  }
+  
+  .split-half:hover .arrow-indicator {
+    transform: translate(3px, -3px);
+  }
+  
+  .floating-theme-btn {
+    top: 1.5rem;
+    right: 1.5rem;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.6rem;
   }
 }
