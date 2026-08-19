@@ -25,7 +25,7 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
         >
-          <div className="brand-subtitle">PRAMUDITHA NADUN 2.0.</div>
+          <div className="brand-subtitle">Developer | Designer</div>
         </motion.div>
 
         {/* Hero Section (Typography Layout) */}
