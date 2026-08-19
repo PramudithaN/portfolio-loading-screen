@@ -87,6 +87,13 @@ body {
   opacity: 0.55; /* Decreased opacity for improved contrast with the white foreground text */
   width: 100%;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bg-text span {
+  display: inline-block;
 }
 
 /* Vignette Overlay (Ellipse gradient to prevent letter edges from being blacked out too early) */
@@ -216,16 +223,18 @@ body {
   border-color: var(--text-white);
 }
 
-/* Responsive adjustments for Tablets (Portrait) */
+/* Responsive adjustments for Tablets (Portrait) - Rotates background text -90 degrees */
 @media (max-width: 1024px) {
   .portfolio-container {
     padding: 2.5rem 1.5rem;
   }
   
   .bg-text {
-    font-size: 45vh; /* Sized by height to guarantee full vertical coverage */
-    transform: translate(-50%, -50%) scaleY(2.6) scaleX(3.0); /* Stretches horizontally and vertically */
+    font-size: 28vh; /* Height-based sizing to match the screen height scaling when rotated */
+    /* Rotated -90 degrees and stretched exactly like the desktop layout */
+    transform: translate(-50%, -50%) rotate(-90deg) scaleY(2.6) scaleX(1.65);
     opacity: 0.55;
+    letter-spacing: -0.04em;
   }
   
   .fg-text {
@@ -247,16 +256,18 @@ body {
   }
 }
 
-/* Responsive adjustments for Mobiles (Portrait) */
+/* Responsive adjustments for Mobiles (Portrait) - Rotates background text -90 degrees */
 @media (max-width: 480px) {
   .top-section {
     gap: 1.5rem;
   }
   
   .bg-text {
-    font-size: 42vh; /* Sized by height to guarantee full vertical coverage */
-    transform: translate(-50%, -50%) scaleY(2.4) scaleX(3.2); /* Stretches horizontally and vertically */
+    font-size: 28vh; /* Height-based sizing to match the screen height scaling when rotated */
+    /* Rotated -90 degrees and stretched exactly like the desktop layout */
+    transform: translate(-50%, -50%) rotate(-90deg) scaleY(2.6) scaleX(1.65);
     opacity: 0.55;
+    letter-spacing: -0.04em;
   }
   
   .fg-text {
