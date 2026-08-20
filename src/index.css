@@ -754,6 +754,26 @@ body {
     justify-content: center;
     gap: 1.5rem;
   }
+
+  .mobile-scroll-down-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 2rem;
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    animation: pulseOpacity 2s infinite ease-in-out;
+  }
+
+  .bouncing-arrow {
+    font-size: 0.95rem;
+    animation: bounceY 1.6s infinite ease-in-out;
+  }
   
   .top-half .split-title-wrapper {
     font-size: 12.6vw;
@@ -820,8 +840,8 @@ body {
   }
   
   .fg-text {
-    font-size: 21vw;
-    transform: scaleY(1.35);
+    font-size: 26vw;
+    transform: scaleY(1.25);
   }
   
 
@@ -855,26 +875,6 @@ body {
   .home-guide-link {
     top: 1.5rem;
     font-size: 0.6rem;
-  }
-
-  .mobile-scroll-down-prompt {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.4rem;
-    margin-top: 2rem;
-    font-family: var(--font-sans);
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.45);
-    animation: pulseOpacity 2s infinite ease-in-out;
-  }
-
-  .bouncing-arrow {
-    font-size: 0.95rem;
-    animation: bounceY 1.6s infinite ease-in-out;
   }
 }
 
