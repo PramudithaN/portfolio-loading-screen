@@ -1,3 +1,39 @@
+@font-face {
+  font-family: 'Might';
+  src: local('Might'), local('Might Regular'),
+       url('/fonts/Might.otf') format('opentype'),
+       url('/fonts/Might.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Hookride';
+  src: local('Hookride'), local('Hookride Regular'),
+       url('/fonts/Hookride.otf') format('opentype'),
+       url('/fonts/Hookride.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Harmera';
+  src: local('Harmera'), local('Harmera Regular'),
+       url('/fonts/Harmera.otf') format('opentype'),
+       url('/fonts/Harmera.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gondens DEMO';
+  src: local('Gondens DEMO'), local('GondensDEMO'),
+       url('/fonts/Gondens DEMO.otf') format('opentype'),
+       url('/fonts/Gondens DEMO.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --bg-color: #000000;
   --text-white: #ffffff;
@@ -230,12 +266,12 @@ body {
 
 /* White Text: PRAMUDITHA (Bebas Neue style) */
 .fg-text {
-  font-family: var(--font-tall);
-  font-size: 11vw;
+  font-family: 'Harmera', 'Gondens DEMO', 'Gondens', var(--font-tall);
+  font-size: 12.2vw;
   font-weight: 400; /* Bebas Neue is naturally bold */
   color: var(--text-white);
   text-transform: uppercase;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.05em;
   line-height: 0.8;
   transform: scaleY(1.75);
   transform-origin: center;
@@ -700,10 +736,10 @@ body {
   }
   
   .fg-text {
-    font-size: 13vw;
+    font-size: 15.5vw;
     transform: scaleY(1.5);
   }
-  
+
   .description-text {
     font-size: 0.6rem;
     letter-spacing: 0.14em;
@@ -784,8 +820,8 @@ body {
   }
   
   .fg-text {
-    font-size: 14vw;
-    transform: scaleY(1.4);
+    font-size: 21vw;
+    transform: scaleY(1.35);
   }
   
 

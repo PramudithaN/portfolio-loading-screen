@@ -763,6 +763,12 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.8 }}
           >
+            {/* Mobile Scroll Down Prompt */}
+            <div className="mobile-scroll-down-prompt">
+              <span>Scroll Down</span>
+              <Icon icon="mdi:chevron-down" className="bouncing-arrow" />
+            </div>
+
             <p className="description-text">
               PRAMUDITHA NADUN IS A SOFTWARE ENGINEER & DESIGNER WITH A PASSION FOR CREATING WEB APPLICATIONS. EXPERIENCED IN BOTH FRONT-END AND BACK-END DEVELOPMENT, ALWAYS EAGER TO MASTER NEW SYSTEMS, COLLABORATE WITH CROSS-FUNCTIONAL TEAMS, AND ARCHITECT MEANINGFUL DIGITAL SOLUTIONS.
             </p>
@@ -820,12 +826,6 @@ export default function App() {
               >
                 <Icon icon="mdi:email-outline" width="24" height="24" />
               </a>
-            </div>
-            
-            {/* Mobile Scroll Down Prompt */}
-            <div className="mobile-scroll-down-prompt">
-              <span>Scroll Down</span>
-              <Icon icon="mdi:chevron-down" className="bouncing-arrow" />
             </div>
           </motion.div>
         </div>
