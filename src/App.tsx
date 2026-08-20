@@ -556,13 +556,21 @@ export default function App() {
                 default: return null;
               }
             };
+            const isInternal = item.title === 'Graphic Designer' || item.title === 'VFX Enthusiast';
+            const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+              if (isInternal) {
+                e.preventDefault();
+                navigateTo('aesthetics');
+              }
+            };
             return (
               <a 
                 key={index} 
                 href={item.link} 
                 className="beyond-card"
-                target="_blank"
-                rel="noopener noreferrer"
+                onClick={handleClick}
+                target={isInternal ? undefined : "_blank"}
+                rel={isInternal ? undefined : "noopener noreferrer"}
               >
                 <div className="beyond-card-header">
                   {renderIcon(item.icon)}
