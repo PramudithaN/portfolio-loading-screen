@@ -940,6 +940,16 @@ body {
   border-right: 0;
 }
 
+.experience-subcard {
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.experience-subcard:active {
+  cursor: grabbing;
+}
+
 .about-subcard-entries {
   display: grid;
   gap: 1rem;
@@ -978,8 +988,11 @@ body {
 .about-subcard-pagination .dot {
   width: 5px;
   height: 5px;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
   background: #aaa8a5;
+  cursor: pointer;
 }
 
 .about-subcard-pagination .dot.active {
@@ -1044,6 +1057,30 @@ body {
   font-size: 0.77rem;
   font-weight: 800;
   cursor: pointer;
+}
+
+.about-social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.about-social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  color: #171719;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.about-social-links a:hover {
+  color: #fff;
+  background-color: #ed2727;
+  border-color: #ed2727;
 }
 
 @media (max-width: 800px) {
@@ -1133,6 +1170,26 @@ body {
 
   .about-subcard {
     min-height: 142px;
+    padding: 1.1rem 1.15rem;
+  }
+
+  .about-subcard-entry {
+    gap: 0.15rem;
+  }
+
+  .about-entry-copy {
+    max-width: none;
+    margin-bottom: 0;
+  }
+
+  .about-subcard-text {
+    margin-top: 0.35rem;
+    margin-bottom: 0;
+  }
+
+  .about-subcard:last-child {
+    gap: 1rem;
+    justify-content: flex-start;
   }
 
   .about-subcard:nth-child(3) {
@@ -2063,9 +2120,9 @@ body {
   .subpage-scroll-top-btn {
     bottom: 1.25rem;
     right: 1.25rem;
-    width: 2.4rem;
-    height: 2.4rem;
-    font-size: 1.2rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    font-size: 1.1rem;
   }
 
   .about-editorial-headline {
@@ -2339,9 +2396,12 @@ body {
 }
 
 .repo-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   background-color: rgba(255, 255, 255, 0.45);
   border: 1px solid rgba(0, 0, 0, 0.07);
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 2rem;
   display: flex;
   flex-direction: column;
@@ -2351,6 +2411,17 @@ body {
   text-decoration: none;
   color: inherit;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.repo-scanline {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
+  opacity: 0.35;
+  transform: translateX(-100%);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
 }
 
 .repo-card.featured {
@@ -2366,6 +2437,42 @@ body {
   border-color: rgba(0, 0, 0, 0.13);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
   transform: translateY(-6px);
+}
+
+.repo-card:hover .repo-scanline,
+.repo-card:focus-within .repo-scanline {
+  transform: translateX(100%);
+}
+
+.repo-card-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.repo-card-index {
+  color: var(--accent-red);
+}
+
+.repo-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.repo-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #3d9a67;
+  box-shadow: 0 0 0 3px rgba(61, 154, 103, 0.12);
 }
 
 .repo-card-header {
@@ -2393,6 +2500,17 @@ body {
   white-space: nowrap;
 }
 
+.repo-stat-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.repo-stat-item svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
 .repo-desc {
   font-size: 0.8rem;
   line-height: 1.5;
@@ -2408,6 +2526,59 @@ body {
   font-size: 0.7rem;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   padding-top: 0.8rem;
+}
+
+.repo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.15rem;
+}
+
+.repo-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  color: #171719;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.repo-action svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.repo-action span {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.repo-action:hover,
+.repo-action:focus-visible {
+  color: #fff;
+  background: #171719;
+  border-color: #171719;
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.repo-action.live-action {
+  color: var(--accent-red);
+  border-color: rgba(237, 39, 39, 0.35);
+}
+
+.repo-action.live-action:hover,
+.repo-action.live-action:focus-visible {
+  color: #fff;
+  background: var(--accent-red);
+  border-color: var(--accent-red);
 }
 
 .repo-lang-badge {

@@ -162,6 +162,8 @@ export default function App() {
   const [reposError, setReposError] = useState<boolean>(false)
 
   const [otherReposExpanded, setOtherReposExpanded] = useState(false)
+  const [activeExperienceIndex, setActiveExperienceIndex] = useState(0)
+  const experienceSwipeStartX = useRef<number | null>(null)
 
   useEffect(() => {
     const fetchRepos = async () => {
@@ -377,6 +379,8 @@ export default function App() {
     ? otherRepos 
     : otherRepos.slice(0, 4);
 
+  const activeExperience = experienceData[activeExperienceIndex]
+
   // --- SUBPAGE RENDERING: ABOUT ME ---
   if (page === 'about') {
     return (
@@ -434,11 +438,11 @@ export default function App() {
                 <span>Anywhere</span>
               </h2>
               <p className="about-card-desc">
-                Associate Software Engineer at LOLC Technologies crafting high-performance enterprise platforms, modern web architectures, and cinematic visual experiences for a new generation of scalable <button
+                Software engineering undergraduate at the University of Westminster and Associate Software Engineer at LOLC Technologies, building fintech platforms while exploring video editing and graphic design. Discover my <button
                   type="button"
                   className="about-card-action"
                   onClick={() => navigateTo('logic')}
-                >software solutions <span>›</span></button>
+                >software work <span>›</span></button>
               </p>
             </div>
 
@@ -448,18 +452,51 @@ export default function App() {
           <div className="about-bottom-grid">
             
             {/* Card 1: Experience & Base */}
-            <div className="about-subcard">
+            <div
+              className="about-subcard experience-subcard"
+              onPointerDown={(event) => {
+                experienceSwipeStartX.current = event.clientX
+                event.currentTarget.setPointerCapture(event.pointerId)
+              }}
+              onPointerUp={(event) => {
+                const startX = experienceSwipeStartX.current
+                experienceSwipeStartX.current = null
+                if (startX === null) return
+
+                const distance = event.clientX - startX
+                if (Math.abs(distance) < 45) return
+
+                setActiveExperienceIndex((currentIndex) => {
+                  const nextIndex = distance < 0 ? currentIndex + 1 : currentIndex - 1
+                  return Math.max(0, Math.min(experienceData.length - 1, nextIndex))
+                })
+              }}
+              onPointerCancel={() => {
+                experienceSwipeStartX.current = null
+              }}
+              aria-label="Swipe to browse work experience"
+            >
               <div className="about-subcard-label">EXPERIENCE</div>
               <div className="about-subcard-entries">
                 <div className="about-subcard-entry">
-                  <h4 className="about-entry-title">LOLC Technologies</h4>
-                  <p className="about-entry-meta">Fusion X · Associate SE (2024 - Present)</p>
+                  <h4 className="about-entry-title">{activeExperience.company}</h4>
+                  <p className="about-entry-meta">{activeExperience.role} ({activeExperience.duration})</p>
                 </div>
               </div>
               <div className="about-subcard-pagination">
-                <span className="dot active"></span>
-                <span className="dot"></span>
-                <span className="dot"></span>
+                {experienceData.map((experience, index) => (
+                  <button
+                    key={experience.title}
+                    type="button"
+                    className={`dot${index === activeExperienceIndex ? ' active' : ''}`}
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      setActiveExperienceIndex(index)
+                    }}
+                    aria-label={`Show ${experience.title} at ${experience.company}`}
+                    aria-pressed={index === activeExperienceIndex}
+                  />
+                ))}
               </div>
             </div>
 
@@ -467,9 +504,9 @@ export default function App() {
             <div className="about-subcard background-subcard">
               <div className="about-subcard-label">BACKGROUND</div>
               <div className="about-subcard-entry">
-                <h4 className="about-entry-title">Trainee SE &amp; Freelance</h4>
-                <p className="about-entry-meta">Fusion Team · Trainee SE (2022 - 2024)</p>
-                <p className="about-entry-copy">Figma UI systems, Java backend &amp; client fullstack apps</p>
+                <h4 className="about-entry-title">University of Westminster</h4>
+                <p className="about-entry-meta">Undergraduate · Software Engineering</p>
+                <p className="about-entry-copy">Building a foundation in software engineering while developing practical fintech systems and full-stack applications.</p>
               </div>
             </div>
 
@@ -490,16 +527,27 @@ export default function App() {
 
             {/* Card 4: Beyond The Code */}
             <div className="about-subcard">
-              <div className="about-subcard-label">BEYOND CODE</div>
+              <div className="about-subcard-label">CONNECT</div>
               <p className="about-subcard-text">
-                Graphic Designer crafting brand typography, avid Mountain Hiker exploring wilderness trails, and VFX CGI enthusiast.
+                Currently working in fintech, with a creative practice spanning video editing, graphic design, and visual storytelling.
               </p>
-              <button 
-                className="about-subcard-link"
-                onClick={() => navigateTo('aesthetics')}
-              >
-                Explore Beyond Code <span>›</span>
-              </button>
+              <div className="about-social-links" aria-label="Social media links">
+                <a href="https://github.com/PramudithaN" target="_blank" rel="noopener noreferrer" title="GitHub" aria-label="GitHub">
+                  <Icon icon="mdi:github" width="20" height="20" />
+                </a>
+                <a href="http://www.linkedin.com/in/pramuditha-nadun-612b1b204" target="_blank" rel="noopener noreferrer" title="LinkedIn" aria-label="LinkedIn">
+                  <Icon icon="mdi:linkedin" width="20" height="20" />
+                </a>
+                <a href="https://www.instagram.com/pramx.psd?igsh=MWNtaXF2cWw2ajEwcg==" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagram">
+                  <Icon icon="mdi:instagram" width="20" height="20" />
+                </a>
+                <a href="https://web.facebook.com/pramuditha.nadun" target="_blank" rel="noopener noreferrer" title="Facebook" aria-label="Facebook">
+                  <Icon icon="mdi:facebook" width="20" height="20" />
+                </a>
+                <a href="mailto:pramudithanadun@gmail.com" title="Email" aria-label="Email">
+                  <Icon icon="mdi:email-outline" width="20" height="20" />
+                </a>
+              </div>
             </div>
 
           </div>
@@ -657,18 +705,17 @@ export default function App() {
             {featuredRepos.map((repo) => {
               const langClass = `lang-${repo.language ? repo.language.toLowerCase().replace(/[^a-z0-9]/g, '') : 'default'}`;
               return (
-                <a 
-                  key={repo.name} 
-                  href={repo.html_url} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="repo-card featured"
-                >
+                <article key={repo.name} className="repo-card featured">
+                  <div className="repo-scanline" aria-hidden="true"></div>
+                  <div className="repo-card-topline">
+                    <span className="repo-card-index">FEATURED / {String(featuredRepos.indexOf(repo) + 1).padStart(2, '0')}</span>
+                    <span className="repo-status"><span className="repo-status-dot"></span> ACTIVE</span>
+                  </div>
                   <div className="repo-card-header">
                     <h3 className="repo-name">{repo.name}</h3>
                     <div className="repo-stats">
-                      <span className="repo-stat-item">⭐ {repo.stargazers_count}</span>
-                      <span className="repo-stat-item">🍴 {repo.forks_count}</span>
+                      <span className="repo-stat-item"><Icon icon="mdi:star-outline" /> {repo.stargazers_count}</span>
+                      <span className="repo-stat-item"><Icon icon="mdi:source-fork" /> {repo.forks_count}</span>
                     </div>
                   </div>
                   <p className="repo-desc">{repo.description}</p>
@@ -682,7 +729,17 @@ export default function App() {
                       Updated: {new Date(repo.updated_at).toLocaleDateString()}
                     </span>
                   </div>
-                </a>
+                  <div className="repo-actions">
+                    <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="repo-action source-action">
+                      <Icon icon="mdi:github" /> Source <span>↗</span>
+                    </a>
+                    {repo.homepage && (
+                      <a href={repo.homepage} target="_blank" rel="noopener noreferrer" className="repo-action live-action">
+                        <Icon icon="mdi:open-in-new" /> Live demo <span>↗</span>
+                      </a>
+                    )}
+                  </div>
+                </article>
               );
             })}
           </div>
@@ -699,18 +756,17 @@ export default function App() {
               {displayedOtherRepos.map((repo) => {
                 const langClass = `lang-${repo.language ? repo.language.toLowerCase().replace(/[^a-z0-9]/g, '') : 'default'}`;
                 return (
-                  <a 
-                    key={repo.name} 
-                    href={repo.html_url} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="repo-card"
-                  >
+                  <article key={repo.name} className="repo-card">
+                    <div className="repo-scanline" aria-hidden="true"></div>
+                    <div className="repo-card-topline">
+                      <span className="repo-card-index">PROJECT / {String(displayedOtherRepos.indexOf(repo) + 1).padStart(2, '0')}</span>
+                      <span className="repo-status"><span className="repo-status-dot"></span> REPO</span>
+                    </div>
                     <div className="repo-card-header">
                       <h3 className="repo-name">{repo.name}</h3>
                       <div className="repo-stats">
-                        <span className="repo-stat-item">⭐ {repo.stargazers_count}</span>
-                        <span className="repo-stat-item">🍴 {repo.forks_count}</span>
+                        <span className="repo-stat-item"><Icon icon="mdi:star-outline" /> {repo.stargazers_count}</span>
+                        <span className="repo-stat-item"><Icon icon="mdi:source-fork" /> {repo.forks_count}</span>
                       </div>
                     </div>
                     <p className="repo-desc">{repo.description}</p>
@@ -724,7 +780,17 @@ export default function App() {
                         Updated: {new Date(repo.updated_at).toLocaleDateString()}
                       </span>
                     </div>
-                  </a>
+                      <div className="repo-actions">
+                        <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="repo-action source-action">
+                          <Icon icon="mdi:github" /> Source <span>↗</span>
+                        </a>
+                        {repo.homepage && (
+                          <a href={repo.homepage} target="_blank" rel="noopener noreferrer" className="repo-action live-action">
+                            <Icon icon="mdi:open-in-new" /> Live demo <span>↗</span>
+                          </a>
+                        )}
+                      </div>
+                    </article>
                 );
               })}
             </div>
@@ -967,15 +1033,18 @@ export default function App() {
               >
                 PRAMUDITHA
               </motion.h1>
-              <button
+              <motion.button
                 type="button"
                 className="home-about-cta-btn"
                 onClick={() => navigateTo('about')}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
               >
                 <span className="cta-dot" aria-hidden="true"></span>
                 <span>What's wrong with me?</span>
                 <span className="cta-arrow" aria-hidden="true">›</span>
-              </button>
+              </motion.button>
             </div>
           </div>
 
