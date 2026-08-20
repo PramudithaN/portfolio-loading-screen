@@ -690,7 +690,7 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
           >
-            <div className="brand-subtitle">Associate Software Engineer & AI Researcher</div>
+            <div className="brand-subtitle">Software Engineer | Designer</div>
           </motion.div>
 
           {/* Hero Section */}
@@ -716,7 +716,7 @@ export default function App() {
             transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.8 }}
           >
             <p className="description-text">
-              PRAMUDITHA NADUN IS AN ASSOCIATE SOFTWARE ENGINEER & AI RESEARCHER WITH A PASSION FOR CREATING WEB APPLICATIONS. EXPERIENCED IN BOTH FRONT-END AND BACK-END DEVELOPMENT, ALWAYS EAGER TO MASTER NEW SYSTEMS, COLLABORATE WITH CROSS-FUNCTIONAL TEAMS, AND ARCHITECT MEANINGFUL DIGITAL SOLUTIONS.
+              PRAMUDITHA NADUN IS A SOFTWARE ENGINEER & DESIGNER WITH A PASSION FOR CREATING WEB APPLICATIONS. EXPERIENCED IN BOTH FRONT-END AND BACK-END DEVELOPMENT, ALWAYS EAGER TO MASTER NEW SYSTEMS, COLLABORATE WITH CROSS-FUNCTIONAL TEAMS, AND ARCHITECT MEANINGFUL DIGITAL SOLUTIONS.
             </p>
 
             <div className="footer-links">
