@@ -149,7 +149,8 @@ function TestimonialCard({ name, role, avatarUrl, text }: TestimonialProps) {
 }
 
 export default function App() {
-  const [page, setPage] = useState<'home' | 'logic' | 'aesthetics'>('home')
+  const [page, setPage] = useState<'home' | 'logic' | 'aesthetics' | 'about'>('home')
+  const [prevPage, setPrevPage] = useState<'logic' | 'aesthetics' | 'home'>('home')
 
   const section2Ref = useRef<HTMLDivElement>(null)
   const fromSubpageRef = useRef<boolean>(false)
@@ -261,9 +262,12 @@ export default function App() {
   }, []);
 
   // Helper function to handle navigation & URL updates
-  const navigateTo = (newPage: 'home' | 'logic' | 'aesthetics') => {
+  const navigateTo = (newPage: 'home' | 'logic' | 'aesthetics' | 'about') => {
     if (newPage === 'home' && page !== 'home') {
       fromSubpageRef.current = true
+    }
+    if (newPage === 'about' && (page === 'logic' || page === 'aesthetics')) {
+      setPrevPage(page)
     }
     setPage(newPage)
     const path = newPage === 'home' ? '/' : `/${newPage}`
@@ -284,6 +288,7 @@ export default function App() {
         const path = window.location.pathname
         if (path === '/logic') setPage('logic')
         else if (path === '/aesthetics') setPage('aesthetics')
+        else if (path === '/about') setPage('about')
         else {
           if (page !== 'home') fromSubpageRef.current = true
           setPage('home')
@@ -299,6 +304,8 @@ export default function App() {
       setPage('logic')
     } else if (initialPath === '/aesthetics') {
       setPage('aesthetics')
+    } else if (initialPath === '/about') {
+      setPage('about')
     } else {
       setPage('home')
     }
@@ -345,10 +352,70 @@ export default function App() {
     ? otherRepos 
     : otherRepos.slice(0, 4);
 
+  // --- SUBPAGE RENDERING: ABOUT ME ---
+  if (page === 'about') {
+    return (
+      <div ref={subpageRef} className="subpage-container about-subpage">
+        <div className="subpage-scroll-content">
+          {/* Subpage Background Watermarks */}
+          <div className="subpage-bg-watermark right-watermark">
+            <span>PRAMUDITHA NADUN | ABOUT</span>
+          </div>
+
+          {/* Subpage Header */}
+          <div className="top-header-row">
+            <div 
+              className="stacked-logo" 
+              onClick={() => {
+                navigateTo('home');
+                setTimeout(() => {
+                  const scrollContainer = document.querySelector('.scroll-container');
+                  if (scrollContainer) scrollContainer.scrollTo({ top: 0 });
+                }, 50);
+              }}
+            >
+              <span>PR</span>
+              <span>NA</span>
+            </div>
+            <button className="theme-toggle-btn" onClick={() => navigateTo(prevPage)}>
+              ← Back
+            </button>
+          </div>
+
+          {/* Subpage Intro */}
+          <h1 className="subpage-title">About Me</h1>
+          <p className="subpage-subtitle">Software Engineer & Designer</p>
+
+          {/* Main About Me Layout */}
+          <div className="about-me-section">
+            <div className="about-me-column">
+              <h3 className="about-column-title">Who Am I</h3>
+              <p className="about-column-text">
+                I am a Software Engineer & Designer based in Sri Lanka, dedicated to building high-performance systems and clean digital user interfaces. Currently working as an Associate Software Engineer at LOLC Technologies, I focus on web architecture, code optimization, and collaborating on enterprise projects. I thrive on bringing logical design structures and visual precision to every codebase I build.
+              </p>
+            </div>
+            <div className="about-me-column">
+              <h3 className="about-column-title">Beyond Code</h3>
+              <p className="about-column-text">
+                My creativity extends far beyond the IDE. I am heavily involved in graphic layout architecture, VFX editing, Premiere/After Effects cinematography, and vector brand design. I draw deep creative energy from exploring nature, photography, and studying typographic art systems, continuously bridging technical engineering with artistic values.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // --- SUBPAGE RENDERING: LOGIC & SYSTEMS ---
   if (page === 'logic') {
     return (
       <div ref={subpageRef} className="subpage-container logic-subpage">
+        <div className="subpage-scroll-content">
+          {/* Subpage Background Watermarks */}
+        <div className="subpage-bg-watermark right-watermark">
+          <span>PRAMUDITH NADUN | DEVELOPER</span>
+        </div>
+
         {/* Subpage Header */}
         <div className="top-header-row">
           <div 
@@ -364,9 +431,14 @@ export default function App() {
             <span>PR</span>
             <span>NA</span>
           </div>
-          <button className="theme-toggle-btn" onClick={() => navigateTo('home')}>
-            Back to Portals
-          </button>
+          <div className="header-buttons">
+            <button className="theme-toggle-btn" onClick={() => navigateTo('about')}>
+              About Me
+            </button>
+            <button className="theme-toggle-btn" onClick={() => navigateTo('home')}>
+              Back to Portals
+            </button>
+          </div>
         </div>
 
         {/* Subpage Intro */}
@@ -613,6 +685,7 @@ export default function App() {
           ))}
         </div>
       </div>
+    </div>
     )
   }
 
@@ -620,6 +693,12 @@ export default function App() {
   if (page === 'aesthetics') {
     return (
       <div ref={subpageRef} className="subpage-container aesthetics-subpage">
+        <div className="subpage-scroll-content">
+          {/* Subpage Background Watermarks */}
+        <div className="subpage-bg-watermark right-watermark">
+          <span>PRAMUDITHA NADUN | DESIGNER</span>
+        </div>
+
         {/* Subpage Header */}
         <div className="top-header-row">
           <div 
@@ -635,9 +714,14 @@ export default function App() {
             <span>PR</span>
             <span>NA</span>
           </div>
-          <button className="theme-toggle-btn" onClick={() => navigateTo('home')}>
-            Back to Portals
-          </button>
+          <div className="header-buttons">
+            <button className="theme-toggle-btn" onClick={() => navigateTo('about')}>
+              About Me
+            </button>
+            <button className="theme-toggle-btn" onClick={() => navigateTo('home')}>
+              Back to Portals
+            </button>
+          </div>
         </div>
 
         {/* Subpage Intro */}
@@ -681,6 +765,7 @@ export default function App() {
         </div>
 
       </div>
+    </div>
     )
   }
 
