@@ -666,9 +666,24 @@ export default function App() {
       <section className="scroll-section">
         {/* Left Side Socials Vertical */}
         <div className="left-socials-vertical">
-          <a href="https://github.com/PramudithaN" target="_blank" rel="noopener noreferrer">Github</a>
-          <a href="http://www.linkedin.com/in/pramuditha-nadun-612b1b204" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          <a href="https://www.instagram.com/pramx.psd?igsh=MWNtaXF2cWw2ajEwcg==" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="https://github.com/PramudithaN" target="_blank" rel="noopener noreferrer" title="GitHub">
+            <Icon icon="mdi:github" width="22" height="22" />
+          </a>
+          <a href="https://www.instagram.com/pramx.psd?igsh=MWNtaXF2cWw2ajEwcg==" target="_blank" rel="noopener noreferrer" title="Instagram">
+            <Icon icon="mdi:instagram" width="22" height="22" />
+          </a>
+          <a href="https://web.facebook.com/pramuditha.nadun" target="_blank" rel="noopener noreferrer" title="Facebook">
+            <Icon icon="mdi:facebook" width="22" height="22" />
+          </a>
+          <a href="https://www.behance.net" target="_blank" rel="noopener noreferrer" title="Behance">
+            <Icon icon="simple-icons:behance" width="22" height="22" />
+          </a>
+          <a href="https://www.pinterest.com" target="_blank" rel="noopener noreferrer" title="Pinterest">
+            <Icon icon="mdi:pinterest" width="22" height="22" />
+          </a>
+          <a href="mailto:pramudithanadun9@gmail.com" target="_blank" rel="noopener noreferrer" title="Email">
+            <Icon icon="mdi:email-outline" width="22" height="22" />
+          </a>
         </div>
         
         {/* Right Scroll Vertical */}
@@ -733,30 +748,52 @@ export default function App() {
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="footer-link"
+                title="GitHub"
               >
-                GITHUB
+                <Icon icon="mdi:github" width="24" height="24" />
               </a>
               <a 
-                href="http://www.linkedin.com/in/pramuditha-nadun-612b1b204" 
+                href="https://www.instagram.com/pramx.psd?igsh=MWNtaXF2cWw2ajEwcg==" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="footer-link"
+                title="Instagram"
               >
-                LINKEDIN
+                <Icon icon="mdi:instagram" width="24" height="24" />
               </a>
               <a 
-                href="mailto:pramudithanadun@gmail.com" 
-                className="footer-link"
-              >
-                EMAIL
-              </a>
-              <a 
-                href="/Documents/Pramuditha_Nadun-Resume.pdf" 
+                href="https://web.facebook.com/pramuditha.nadun" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="footer-link"
+                title="Facebook"
               >
-                RESUME
+                <Icon icon="mdi:facebook" width="24" height="24" />
+              </a>
+              <a 
+                href="https://www.behance.net" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="footer-link"
+                title="Behance"
+              >
+                <Icon icon="simple-icons:behance" width="24" height="24" />
+              </a>
+              <a 
+                href="https://www.pinterest.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="footer-link"
+                title="Pinterest"
+              >
+                <Icon icon="mdi:pinterest" width="24" height="24" />
+              </a>
+              <a 
+                href="mailto:pramudithanadun9@gmail.com" 
+                className="footer-link"
+                title="Email"
+              >
+                <Icon icon="mdi:email-outline" width="24" height="24" />
               </a>
             </div>
           </motion.div>
