@@ -153,6 +153,7 @@ export default function App() {
 
   const section2Ref = useRef<HTMLDivElement>(null)
   const fromSubpageRef = useRef<boolean>(false)
+  const subpageRef = useRef<HTMLDivElement>(null)
 
   const [featuredRepos, setFeaturedRepos] = useState<any[]>([])
   const [otherRepos, setOtherRepos] = useState<any[]>([])
@@ -315,6 +316,23 @@ export default function App() {
     }
   }, [page])
 
+  // Scroll to top instantly when entering a subpage
+  useEffect(() => {
+    if (page === 'logic' || page === 'aesthetics') {
+      window.scrollTo(0, 0)
+      document.documentElement.scrollTo(0, 0)
+      document.body.scrollTo(0, 0)
+      if (subpageRef.current) {
+        subpageRef.current.scrollTo(0, 0)
+      } else {
+        setTimeout(() => {
+          const container = document.querySelector('.subpage-container')
+          if (container) container.scrollTo(0, 0)
+        }, 0)
+      }
+    }
+  }, [page])
+
   // Slice displayed repositories
   const displayedOtherRepos = otherReposExpanded 
     ? otherRepos 
@@ -323,7 +341,7 @@ export default function App() {
   // --- SUBPAGE RENDERING: LOGIC & SYSTEMS ---
   if (page === 'logic') {
     return (
-      <div className="subpage-container logic-subpage">
+      <div ref={subpageRef} className="subpage-container logic-subpage">
         {/* Subpage Header */}
         <div className="top-header-row">
           <div className="stacked-logo">
@@ -577,7 +595,7 @@ export default function App() {
   // --- SUBPAGE RENDERING: AESTHETICS & MOTION ---
   if (page === 'aesthetics') {
     return (
-      <div className="subpage-container aesthetics-subpage">
+      <div ref={subpageRef} className="subpage-container aesthetics-subpage">
         {/* Subpage Header */}
         <div className="top-header-row">
           <div className="stacked-logo">
