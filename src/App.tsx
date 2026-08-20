@@ -1,12 +1,263 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
+import { Icon } from '@iconify/react'
+import { Palette, Mountain, Clapperboard } from 'lucide-react'
 import './index.css'
+
+const skillsList = [
+  { text: "HTML", logo: "mdi:language-html5" },
+  { text: "CSS", logo: "mdi:language-css3" },
+  { text: "JavaScript", logo: "mdi:language-javascript" },
+  { text: "TypeScript", logo: "mdi:language-typescript" },
+  { text: "Python", logo: "mdi:language-python" },
+  { text: "Java", logo: "mdi:language-java" },
+  { text: "React", logo: "mdi:react" },
+  { text: "Node.js", logo: "mdi:nodejs" },
+  { text: "Astro", logo: "simple-icons:astro" },
+  { text: "Tailwind CSS", logo: "simple-icons:tailwindcss" },
+  { text: "Figma", logo: "simple-icons:figma" },
+  { text: "Git", logo: "mdi:git" }
+]
+
+const experienceData = [
+  {
+    company: "LOLC Technologies",
+    role: "Fusion X Team - Frontend Developer",
+    title: "Associate Software Engineer",
+    duration: "2024 - Present",
+    tech: ["React", "TypeScript", "Redux", "Ant Design (AntD)", "Figma", "Spring Boot", "Jenkins", "ArgoCD", "Git"],
+    accomplishments: [
+      "Working on software development in a hybrid environment.",
+      "Mastered React and TypeScript, with a deep understanding of React Hooks and Forms.",
+      "Worked with state management using Redux for efficient data handling.",
+      "Gained experience in Ant Design (AntD) for building modern UI components.",
+      "Enhanced UI/UX skills, including Figma design and user experience improvements.",
+      "Applied fundamental knowledge of Spring Boot for backend development.",
+      "Handled deployments to QA, UAT, and Prod environments.",
+      "Managed screen permissions and user access control.",
+      "Worked with CI/CD pipelines using Jenkins and ArgoCD.",
+      "Monitored deployment progress and troubleshooting issues.",
+      "Gained experience in Git versioning, including Git tags and commands."
+    ]
+  },
+  {
+    company: "LOLC Technologies",
+    role: "Fusion Team - Trainee SE",
+    title: "Trainee Software Engineer",
+    duration: "Mar 2022 - Oct 2024",
+    tech: ["React", "TypeScript", "Figma", "Java", "Oracle Forms", "Jasper Reports"],
+    accomplishments: [
+      "Worked as part of the UI/UX team, creating Figma designs and improving user experience.",
+      "Gained hands-on experience in frontend development using React and TypeScript.",
+      "Implemented interactive UI components and responsive layouts.",
+      "Worked with Java, Oracle Forms, and Jasper Reports for backend and reporting functionalities.",
+      "Developed and maintained data-driven reports and dashboards for business decision-making.",
+      "Collaborated with cross-functional teams to deliver software solutions aligned with business requirements."
+    ]
+  },
+  {
+    company: "Self-Employed",
+    role: "Independent Full-Stack Developer",
+    title: "Freelance Developer",
+    duration: "2022 - Present",
+    tech: ["React", "Next.js", "Spring Boot", "Node.js", "Tailwind CSS", "Automation"],
+    accomplishments: [
+      "Architected and delivered end-to-end full-stack applications for diverse freelance clients, transforming requirements into production-ready software solutions.",
+      "Developed high-performance, custom web applications utilizing React, Next.js, Spring Boot, and Node.js.",
+      "Designed and implemented highly responsive, mobile-first websites with clean layouts and semantic markup.",
+      "Provided expert technical consultations, advising clients on system design, architecture, and technology stack selection.",
+      "Designed and integrated CI/CD pipelines and deployment automation setups for ongoing client applications to streamline release cycles."
+    ]
+  }
+]
+
+const testimonialsData = [
+  {
+    name: "Thavinya Wijesinghe",
+    role: "Senior Business Analyst @ LOLC Technologies",
+    avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=TW",
+    text: "I had the pleasure of working with Pramuditha during my time at LOLC Technologies, and I can honestly say he’s one of the most well rounded professionals I’ve met. Although his role was as a Software Engineer (FE), he quickly mastered the domain after joining and went beyond what was expected.\n\nWhat makes him stand out is not just his technical skills in FE development, but also his strong eye for design, UI/UX, and even graphics. I've noticed that he has a rare ability to bridge the gap between development, design, and the user experience which is very crucial.\n\nAnother quality I truly admire in Pramuditha is how collaborative he is. In my opinion, many developers tend to prefer working in isolation, but he performs very well in teamwork. I've seen how he actively engages with BAs and QAs, adding a strong sense of collaboration within the team. On a personal note, I’ve also sought his insights for some of my own projects, especially around UI/UX, and his feedback was not only helpful but also showed how much thought he puts into creating meaningful user experiences.\n\nPramuditha is someone who brings both technical excellence and a human touch to his work, and any team would be lucky to have him."
+  },
+  {
+    name: "Rishara Perera",
+    role: "Marketing Executive",
+    avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=RP",
+    text: "I’ve had the pleasure of working with Pramuditha on several projects, and I can confidently say he is one of the most reliable and talented professionals I’ve collaborated with. His expertise in graphic design and front-end development brings both creativity and technical precision to every project.\n\nWhat stood out to me most is his flexibility and willingness to adapt to changing requirements without ever compromising on quality. He takes full ownership of his work, consistently meeting deadlines while ensuring the output exceeds expectations. Beyond his technical skills, Pramuditha is a true team player who communicates well and makes collaboration seamless.\n\nI would highly recommend Pramuditha to anyone looking for someone who can deliver outstanding design and development work while also being dependable and easy to work with."
+  },
+  {
+    name: "Oshidhie Peiris",
+    role: "Associate Quality Assurance Engineer",
+    avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=OP",
+    text: "I’ve had the chance to work with Pramuditha as a QA Engineer, and I can confidently say his work is always clean, well-structured, and reliable. Issues are rare, and even when they come up, he’s quick to collaborate and resolve them smoothly. His attention to detail and quality mindset make him a great teammate and a strong asset to any project."
+  }
+]
+
+const beyondCodeData = [
+  {
+    title: "Graphic Designer",
+    description: "Crafting visually engaging layouts, digital art, and layouts. I love blending aesthetic beauty with clear functionality to tell stories visually.",
+    icon: "palette",
+    link: "/designer"
+  },
+  {
+    title: "Avid Hiker",
+    description: "Trekking through mountains, exploring scenic wilderness trails, and connecting with nature. Hiking feeds my curiosity and builds resilience.",
+    icon: "mountain",
+    link: "/hikes"
+  },
+  {
+    title: "VFX Enthusiast",
+    description: "Fascinated by CGI, digital compositing, and cinematic visual effects. Exploring creative editing techniques to bring imaginative scenes to life.",
+    icon: "clapperboard",
+    link: "/designer#visual-effects-title"
+  }
+]
+
+interface TestimonialProps {
+  name: string;
+  role: string;
+  avatarUrl: string;
+  text: string;
+}
+
+function TestimonialCard({ name, role, avatarUrl, text }: TestimonialProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div className="testimonial-card">
+      <div className="testimonial-content-wrapper">
+        <p className={`testimonial-text ${!isExpanded ? 'collapsed' : 'expanded'}`}>
+          "{text}"
+        </p>
+        <button
+          type="button"
+          className="testimonial-toggle-btn"
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          {isExpanded ? 'Show less' : 'Show more'}
+        </button>
+      </div>
+      <div className="testimonial-author">
+        <img src={avatarUrl} alt={`${name} testimonial photo`} className="testimonial-avatar" />
+        <div className="testimonial-author-info">
+          <div className="testimonial-name">{name}</div>
+          <div className="testimonial-role">{role}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   const [page, setPage] = useState<'home' | 'logic' | 'aesthetics'>('home')
 
   const section2Ref = useRef<HTMLDivElement>(null)
   const fromSubpageRef = useRef<boolean>(false)
+
+  const [featuredRepos, setFeaturedRepos] = useState<any[]>([])
+  const [otherRepos, setOtherRepos] = useState<any[]>([])
+  const [loadingRepos, setLoadingRepos] = useState<boolean>(true)
+  const [reposError, setReposError] = useState<boolean>(false)
+
+  const [otherReposExpanded, setOtherReposExpanded] = useState(false)
+
+  useEffect(() => {
+    const fetchRepos = async () => {
+      const username = 'PramudithaN';
+      const featuredNames = ["11labsM", "petrocast-backend", "digital-wedding-invitation"];
+      const fallbackFeatured = [
+        {
+          name: "11labsM",
+          html_url: "https://github.com/PramudithaN/11labsM",
+          description: "An automated localization and voice generation pipeline that translates English text into 17 languages and sequentially synthesizes high-quality audio using the ElevenLabs API.",
+          stargazers_count: 0,
+          forks_count: 0,
+          updated_at: "2026-06-15T13:54:16Z",
+          language: "Python"
+        },
+        {
+          name: "petrocast-backend",
+          html_url: "https://github.com/PramudithaN/petrocast-backend",
+          description: "Production-grade FastAPI backend for crude oil price forecasting using a decomposition-based hybrid model (ARIMA + GRU + XGBoost) with strictly lagged live news sentiment integration from news sources.",
+          stargazers_count: 2,
+          forks_count: 0,
+          updated_at: "2026-07-25T17:09:02Z",
+          language: "Python"
+        },
+        {
+          name: "digital-wedding-invitation",
+          html_url: "https://github.com/PramudithaN/digital-wedding-invitation",
+          description: "Interactive digital wedding invitation website built with React, Framer Motion, and Tailwind CSS.",
+          stargazers_count: 0,
+          forks_count: 0,
+          updated_at: "2026-08-20T03:22:57Z",
+          language: "TypeScript"
+        }
+      ];
+
+      const excludedNames = [
+        "is-a-dev-register",
+        "jarvis",
+        "skills-introduction-to-repository-management",
+        "skills-introduction-to-secret-scanning",
+        "skills-secure-repository-supply-chain",
+        "PramudithaN",
+        "my-to-do-app",
+        "Celestial-Routes-Figma",
+        "Wavewatchers-Figma"
+      ];
+
+      try {
+        const res = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
+        if (res.ok) {
+          const rawRepos = await res.json();
+          if (Array.isArray(rawRepos)) {
+            const filteredRaw = rawRepos.filter(r => !excludedNames.includes(r.name));
+            const featured = filteredRaw.filter(r => featuredNames.includes(r.name));
+            
+            // Supplement with fallbacks if any featured ones are not returned by the API
+            const featuredWithFallbacks = [...featured];
+            featuredNames.forEach(name => {
+              if (!featuredWithFallbacks.some(f => f.name === name)) {
+                const fb = fallbackFeatured.find(f => f.name === name);
+                if (fb) featuredWithFallbacks.push(fb);
+              }
+            });
+
+            // Sort featured by their index in featuredNames
+            featuredWithFallbacks.sort((a, b) => featuredNames.indexOf(a.name) - featuredNames.indexOf(b.name));
+
+            const other = filteredRaw.filter(r => !featuredNames.includes(r.name));
+
+            setFeaturedRepos(featuredWithFallbacks);
+            setOtherRepos(other);
+          } else {
+            throw new Error('API response is not an array');
+          }
+        } else {
+          throw new Error('API request failed');
+        }
+      } catch (e) {
+        setReposError(true)
+        setFeaturedRepos(fallbackFeatured);
+        setOtherRepos([
+          {
+            name: "Vapi-Clone_FrontEnd",
+            html_url: "https://github.com/PramudithaN/Vapi-Clone_FrontEnd.git",
+            description: "Chatbot Management UI developed with Html and Css",
+            stargazers_count: 2,
+            forks_count: 0,
+            updated_at: new Date().toISOString(),
+            language: "HTML",
+            topics: ["Project"],
+          }
+        ]);
+      } finally {
+        setLoadingRepos(false)
+      }
+    };
+    fetchRepos();
+  }, []);
 
   // Helper function to handle navigation & URL updates
   const navigateTo = (newPage: 'home' | 'logic' | 'aesthetics') => {
@@ -64,6 +315,11 @@ export default function App() {
     }
   }, [page])
 
+  // Slice displayed repositories
+  const displayedOtherRepos = otherReposExpanded 
+    ? otherRepos 
+    : otherRepos.slice(0, 4);
+
   // --- SUBPAGE RENDERING: LOGIC & SYSTEMS ---
   if (page === 'logic') {
     return (
@@ -87,36 +343,232 @@ export default function App() {
         <div className="work-grid">
           <div className="work-card">
             <div>
-              <div className="work-item-meta">01 / Fullstack Development</div>
-              <h3 className="work-item-title">Real-Time Ecosystems</h3>
+              <div className="work-item-meta">01 / ASSOCIATE SOFTWARE ENGINEER</div>
+              <h3 className="work-item-title">Enterprise Web Apps</h3>
               <p className="work-item-desc">
-                Architecting high-concurrency web services, API layers, and web socket feeds using Node.js, TypeScript, and Docker container grids.
+                Architecting and optimizing modern web platforms with React, TypeScript, and Redux, managing CI/CD deployments and user access control at LOLC Technologies.
               </p>
             </div>
-            <span className="work-item-tag">Node.js / TS</span>
+            <span className="work-item-tag">React / Redux</span>
           </div>
 
           <div className="work-card">
             <div>
-              <div className="work-item-meta">02 / Interactive Graphics</div>
-              <h3 className="work-item-title">Web 3D Shader Engines</h3>
+              <div className="work-item-meta">02 / TRAINEE SOFTWARE ENGINEER</div>
+              <h3 className="work-item-title">UI/UX & Systems</h3>
               <p className="work-item-desc">
-                Building custom graphics engines, GLSL shader routines, and fluid simulation screens directly within browser runtimes.
+                Designing interactive frontend components in Figma and building database reporting features with Java, Oracle Forms, and Jasper Reports.
               </p>
             </div>
-            <span className="work-item-tag">WebGL / Three.js</span>
+            <span className="work-item-tag">Figma / Java</span>
           </div>
 
           <div className="work-card">
             <div>
-              <div className="work-item-meta">03 / Tooling & Performance</div>
-              <h3 className="work-item-title">Vite & Build Tooling</h3>
+              <div className="work-item-meta">03 / FREELANCE DEVELOPMENT</div>
+              <h3 className="work-item-title">Fullstack Solutions</h3>
               <p className="work-item-desc">
-                Creating optimized bundler configs, custom hot-reloading hooks, and client environment packages to speed up builds.
+                Delivering high-performance, custom mobile-first applications using React, Next.js, Node.js, and Spring Boot for diverse global clients.
               </p>
             </div>
-            <span className="work-item-tag">Vite / AST</span>
+            <span className="work-item-tag">Next.js / Spring Boot</span>
           </div>
+        </div>
+
+        {/* Skills & Technologies Data */}
+        <div className="section-divider" />
+        <div className="skills-badge-header-wrapper">
+          <span className="skills-badge-header">Skills</span>
+        </div>
+        <p className="skills-subtitle">The skills, tools and technologies I am really good at:</p>
+        <div className="skills-gallery">
+          {skillsList.map((skill) => (
+            <div key={skill.text} className="skills-gallery-item">
+              <Icon icon={skill.logo} className="skills-gallery-icon" />
+              <span className="skills-gallery-text">{skill.text}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Experience Tree (Timeline Style) */}
+        <div className="section-divider" />
+        <h2 className="section-title">Developer Journey</h2>
+        <div className="timeline-container">
+          {experienceData.map((exp, index) => (
+            <div key={index} className="timeline-item">
+              <span className="timeline-dot"></span>
+              <div className="timeline-header">
+                <span className="timeline-duration">{exp.duration}</span>
+                <div className="timeline-title-group">
+                  <h3 className="timeline-job-title">
+                    {exp.title} <span className="company-name">@ {exp.company}</span>
+                  </h3>
+                  <span className="timeline-role">{exp.role}</span>
+                </div>
+              </div>
+              <div className="timeline-details">
+                <div className="timeline-summary">
+                  <span className="timeline-summary-label">Summary:</span>
+                  <ul className="timeline-bullet-list">
+                    {exp.accomplishments.map((acc, aIdx) => (
+                      <li key={aIdx}>{acc}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="timeline-tech-badges">
+                  {exp.tech.map((t) => (
+                    <span key={t} className="tech-badge">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* GitHub Projects Integration */}
+        <div className="section-divider" />
+        <h2 className="section-title">Featured Projects</h2>
+        {reposError && (
+          <div className="repos-fallback-notice">
+            Note: GitHub API limit reached. Showing offline cached projects.
+          </div>
+        )}
+        {loadingRepos ? (
+          <div className="repos-loading">Loading featured projects...</div>
+        ) : (
+          <div className="repos-grid">
+            {featuredRepos.map((repo) => {
+              const langClass = `lang-${repo.language ? repo.language.toLowerCase().replace(/[^a-z0-9]/g, '') : 'default'}`;
+              return (
+                <a 
+                  key={repo.name} 
+                  href={repo.html_url} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="repo-card featured"
+                >
+                  <div className="repo-card-header">
+                    <h3 className="repo-name">{repo.name}</h3>
+                    <div className="repo-stats">
+                      <span className="repo-stat-item">⭐ {repo.stargazers_count}</span>
+                      <span className="repo-stat-item">🍴 {repo.forks_count}</span>
+                    </div>
+                  </div>
+                  <p className="repo-desc">{repo.description}</p>
+                  <div className="repo-footer">
+                    {repo.language && (
+                      <span className={`repo-lang-badge ${langClass}`}>
+                        {repo.language}
+                      </span>
+                    )}
+                    <span className="repo-updated">
+                      Updated: {new Date(repo.updated_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        )}
+
+        <div className="section-divider" />
+        <h2 className="section-title">Projects</h2>
+
+        {loadingRepos ? (
+          <div className="repos-loading">Loading projects...</div>
+        ) : (
+          <>
+            <div className="repos-grid">
+              {displayedOtherRepos.map((repo) => {
+                const langClass = `lang-${repo.language ? repo.language.toLowerCase().replace(/[^a-z0-9]/g, '') : 'default'}`;
+                return (
+                  <a 
+                    key={repo.name} 
+                    href={repo.html_url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="repo-card"
+                  >
+                    <div className="repo-card-header">
+                      <h3 className="repo-name">{repo.name}</h3>
+                      <div className="repo-stats">
+                        <span className="repo-stat-item">⭐ {repo.stargazers_count}</span>
+                        <span className="repo-stat-item">🍴 {repo.forks_count}</span>
+                      </div>
+                    </div>
+                    <p className="repo-desc">{repo.description}</p>
+                    <div className="repo-footer">
+                      {repo.language && (
+                        <span className={`repo-lang-badge ${langClass}`}>
+                          {repo.language}
+                        </span>
+                      )}
+                      <span className="repo-updated">
+                        Updated: {new Date(repo.updated_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+
+            {otherRepos.length > 4 && (
+              <div className="load-more-container">
+                <button
+                  className="projects-load-more-btn"
+                  onClick={() => setOtherReposExpanded(!otherReposExpanded)}
+                >
+                  {otherReposExpanded ? 'Show Less Projects' : `View All Projects (${otherRepos.length})`}
+                </button>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Beyond the Code Section */}
+        <div className="section-divider" />
+        <h2 className="section-title">Beyond the Code</h2>
+        <div className="beyond-grid">
+          {beyondCodeData.map((item, index) => {
+            const renderIcon = (name: string) => {
+              switch(name) {
+                case 'palette': return <Palette className="beyond-icon" />;
+                case 'mountain': return <Mountain className="beyond-icon" />;
+                case 'clapperboard': return <Clapperboard className="beyond-icon" />;
+                default: return null;
+              }
+            };
+            return (
+              <a 
+                key={index} 
+                href={item.link} 
+                className="beyond-card"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="beyond-card-header">
+                  {renderIcon(item.icon)}
+                  <h3 className="beyond-card-title">{item.title}</h3>
+                </div>
+                <p className="beyond-card-desc">{item.description}</p>
+              </a>
+            );
+          })}
+        </div>
+
+        {/* Testimonials Section */}
+        <div className="section-divider" />
+        <h2 className="section-title">Testimonials</h2>
+        <div className="testimonials-grid">
+          {testimonialsData.map((t, index) => (
+            <TestimonialCard 
+              key={index}
+              name={t.name}
+              role={t.role}
+              avatarUrl={t.avatarUrl}
+              text={t.text}
+            />
+          ))}
         </div>
       </div>
     )
@@ -176,6 +628,7 @@ export default function App() {
             <span className="work-item-tag">Generative / 3D</span>
           </div>
         </div>
+
       </div>
     )
   }
@@ -185,6 +638,18 @@ export default function App() {
     <div className="scroll-container">
       {/* SECTION 1: HOME PAGE (Always Dark Cinematic Theme) */}
       <section className="scroll-section">
+        {/* Left Side Socials Vertical */}
+        <div className="left-socials-vertical">
+          <a href="https://github.com/PramudithaN" target="_blank" rel="noopener noreferrer">Github</a>
+          <a href="http://www.linkedin.com/in/pramuditha-nadun-612b1b204" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://www.instagram.com/pramx.psd?igsh=MWNtaXF2cWw2ajEwcg==" target="_blank" rel="noopener noreferrer">Instagram</a>
+        </div>
+        
+        {/* Right Scroll Vertical */}
+        <div className="right-scroll-vertical">
+          Scroll Down
+        </div>
+
         {/* Section 1 Background */}
         <div className="portfolio-bg">
           {/* Giant background text: NADUN */}
@@ -207,7 +672,7 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
           >
-            <div className="brand-subtitle">Developer | Designer</div>
+            <div className="brand-subtitle">Associate Software Engineer & AI Researcher</div>
           </motion.div>
 
           {/* Hero Section */}
@@ -233,23 +698,39 @@ export default function App() {
             transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.8 }}
           >
             <p className="description-text">
-              PRAMUDITHA NADUN IS A DIGITAL ARTIST & CREATIVE DEVELOPER CRAFTING NEXT-GENERATION WEB EXPERIENCES. COMBINING HIGH-END AESTHETICS WITH ROBUST CODE TO BUILD IMMERSIVE DIGITAL PRODUCTS. AVAILABLE FOR CLIENT WORK, PARTNERSHIPS, AND CREATIVE COLLABORATIONS WORLDWIDE.
+              PRAMUDITHA NADUN IS AN ASSOCIATE SOFTWARE ENGINEER & AI RESEARCHER WITH A PASSION FOR CREATING WEB APPLICATIONS. EXPERIENCED IN BOTH FRONT-END AND BACK-END DEVELOPMENT, ALWAYS EAGER TO MASTER NEW SYSTEMS, COLLABORATE WITH CROSS-FUNCTIONAL TEAMS, AND ARCHITECT MEANINGFUL DIGITAL SOLUTIONS.
             </p>
 
             <div className="footer-links">
               <a 
-                href="https://pramuditha.dev" 
+                href="https://github.com/PramudithaN" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="footer-link"
               >
-                PRAMUDITHA.DEV
+                GITHUB
               </a>
               <a 
-                href="mailto:hello@pramuditha.dev" 
+                href="http://www.linkedin.com/in/pramuditha-nadun-612b1b204" 
+                target="_blank" 
+                rel="noopener noreferrer" 
                 className="footer-link"
               >
-                HELLO@PRAMUDITHA.DEV
+                LINKEDIN
+              </a>
+              <a 
+                href="mailto:pramudithanadun@gmail.com" 
+                className="footer-link"
+              >
+                EMAIL
+              </a>
+              <a 
+                href="/Documents/Pramuditha_Nadun-Resume.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="footer-link"
+              >
+                RESUME
               </a>
             </div>
           </motion.div>
