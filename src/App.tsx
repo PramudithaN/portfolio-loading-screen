@@ -333,6 +333,13 @@ export default function App() {
     }
   }, [page])
 
+  const scrollToHome = () => {
+    const scrollContainer = document.querySelector('.scroll-container')
+    if (scrollContainer) {
+      scrollContainer.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
   // Slice displayed repositories
   const displayedOtherRepos = otherReposExpanded 
     ? otherRepos 
@@ -344,7 +351,16 @@ export default function App() {
       <div ref={subpageRef} className="subpage-container logic-subpage">
         {/* Subpage Header */}
         <div className="top-header-row">
-          <div className="stacked-logo">
+          <div 
+            className="stacked-logo" 
+            onClick={() => {
+              navigateTo('home');
+              setTimeout(() => {
+                const scrollContainer = document.querySelector('.scroll-container');
+                if (scrollContainer) scrollContainer.scrollTo({ top: 0 });
+              }, 50);
+            }}
+          >
             <span>PR</span>
             <span>NA</span>
           </div>
@@ -606,7 +622,16 @@ export default function App() {
       <div ref={subpageRef} className="subpage-container aesthetics-subpage">
         {/* Subpage Header */}
         <div className="top-header-row">
-          <div className="stacked-logo">
+          <div 
+            className="stacked-logo" 
+            onClick={() => {
+              navigateTo('home');
+              setTimeout(() => {
+                const scrollContainer = document.querySelector('.scroll-container');
+                if (scrollContainer) scrollContainer.scrollTo({ top: 0 });
+              }, 50);
+            }}
+          >
             <span>PR</span>
             <span>NA</span>
           </div>
@@ -796,6 +821,12 @@ export default function App() {
                 <Icon icon="mdi:email-outline" width="24" height="24" />
               </a>
             </div>
+            
+            {/* Mobile Scroll Down Prompt */}
+            <div className="mobile-scroll-down-prompt">
+              <span>Scroll Down</span>
+              <Icon icon="mdi:chevron-down" className="bouncing-arrow" />
+            </div>
           </motion.div>
         </div>
       </section>
@@ -807,6 +838,12 @@ export default function App() {
       >
         {/* Section 2 Background */}
         <div className="portfolio-bg" />
+
+        {/* Scroll back to Home link */}
+        <div className="home-guide-link" onClick={scrollToHome} title="Scroll to Top">
+          <Icon icon="mdi:chevron-up" className="home-guide-icon" />
+          <span className="home-guide-text">SCROLL TO TOP</span>
+        </div>
 
         {/* Top Half: Logic & Systems */}
         <div 
@@ -871,6 +908,7 @@ export default function App() {
             </svg>
           </div>
         </div>
+
       </section>
     </div>
   )
