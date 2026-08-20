@@ -438,6 +438,14 @@ body {
   white-space: nowrap; /* Prevent horizontal wrapping */
 }
 
+.mobile-break {
+  display: none;
+}
+
+.title-line {
+  display: inline;
+}
+
 /* Sibling diagonal indicator arrow - sits outside the scale transform, keeping it perfectly square */
 .arrow-indicator {
   width: 0.26em; /* Perfectly proportional square box */
@@ -1311,6 +1319,26 @@ body {
   }
   .skills-gallery {
     gap: 2.2rem 1.5rem;
+  }
+  .split-half-title {
+    white-space: normal;
+    line-height: 0.92;
+  }
+  .title-line {
+    display: block;
+    text-align: center;
+    width: 100%;
+  }
+  .top-half .line-1 {
+    font-size: 1.32em;
+  }
+  .top-half .line-2 {
+    font-size: 1.12em;
+    letter-spacing: -0.02em;
+  }
+  .bottom-half .line-2 {
+    font-size: 1.25em;
+    letter-spacing: -0.01em;
   }
 }
 

@@ -758,7 +758,8 @@ export default function App() {
               viewport={{ once: true }}
               transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
             >
-              Logic & Systems
+              <span className="title-line line-1">Logic & </span>
+              <span className="title-line line-2">Systems</span>
             </motion.h2>
             <svg 
               viewBox="0 0 24 24" 
@@ -789,7 +790,8 @@ export default function App() {
               viewport={{ once: true }}
               transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
             >
-              Aesthetics & Motion
+              <span className="title-line line-1">Aesthetics </span>
+              <span className="title-line line-2">& Motion</span>
             </motion.h2>
             <svg 
               viewBox="0 0 24 24" 
