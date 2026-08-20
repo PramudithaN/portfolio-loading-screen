@@ -347,6 +347,31 @@ export default function App() {
     }
   }
 
+  const scrollSubpageToTop = () => {
+    subpageRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  // Show the floating "scroll to top" button only after the user scrolls down a subpage
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    if (page !== 'logic' && page !== 'aesthetics' && page !== 'about') {
+      setShowScrollTop(false)
+      return
+    }
+
+    const container = subpageRef.current
+    if (!container) return
+
+    const handleScroll = () => {
+      setShowScrollTop(container.scrollTop > 400)
+    }
+
+    handleScroll()
+    container.addEventListener('scroll', handleScroll)
+    return () => container.removeEventListener('scroll', handleScroll)
+  }, [page])
+
   // Slice displayed repositories
   const displayedOtherRepos = otherReposExpanded 
     ? otherRepos 
@@ -355,6 +380,7 @@ export default function App() {
   // --- SUBPAGE RENDERING: ABOUT ME ---
   if (page === 'about') {
     return (
+      <>
       <div ref={subpageRef} className="subpage-container about-subpage">
         <div className="subpage-scroll-content">
           {/* Subpage Background Watermarks */}
@@ -480,12 +506,23 @@ export default function App() {
 
         </div>
       </div>
+      <button
+        type="button"
+        className={`subpage-scroll-top-btn${showScrollTop ? ' visible' : ''}`}
+        onClick={scrollSubpageToTop}
+        title="Scroll to top"
+        aria-label="Scroll to top"
+      >
+        <Icon icon="mdi:chevron-up" />
+      </button>
+      </>
     );
   }
 
   // --- SUBPAGE RENDERING: LOGIC & SYSTEMS ---
   if (page === 'logic') {
     return (
+      <>
       <div ref={subpageRef} className="subpage-container logic-subpage">
         <div className="subpage-scroll-content">
           {/* Subpage Background Watermarks */}
@@ -759,13 +796,24 @@ export default function App() {
           ))}
         </div>
       </div>
-    </div>
+      </div>
+      <button
+        type="button"
+        className={`subpage-scroll-top-btn${showScrollTop ? ' visible' : ''}`}
+        onClick={scrollSubpageToTop}
+        title="Scroll to top"
+        aria-label="Scroll to top"
+      >
+        <Icon icon="mdi:chevron-up" />
+      </button>
+      </>
     )
   }
 
   // --- SUBPAGE RENDERING: AESTHETICS & MOTION ---
   if (page === 'aesthetics') {
     return (
+      <>
       <div ref={subpageRef} className="subpage-container aesthetics-subpage">
         <div className="subpage-scroll-content">
           {/* Subpage Background Watermarks */}
@@ -836,7 +884,17 @@ export default function App() {
         </div>
 
       </div>
-    </div>
+      </div>
+      <button
+        type="button"
+        className={`subpage-scroll-top-btn${showScrollTop ? ' visible' : ''}`}
+        onClick={scrollSubpageToTop}
+        title="Scroll to top"
+        aria-label="Scroll to top"
+      >
+        <Icon icon="mdi:chevron-up" />
+      </button>
+      </>
     )
   }
 

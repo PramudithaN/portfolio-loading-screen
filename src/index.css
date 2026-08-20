@@ -473,6 +473,41 @@ body {
   display: none;
 }
 
+/* Floating "scroll to top" button for long subpages (About / Logic / Aesthetics) */
+.subpage-scroll-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1001;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(17, 17, 17, 0.2);
+  background: #DDD9D4;
+  color: #111111;
+  font-size: 1.4rem;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.subpage-scroll-top-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.subpage-scroll-top-btn:hover {
+  background-color: #111111;
+  color: #DDD9D4;
+  border-color: #111111;
+}
+
 /* Split Section Container */
 .scroll-section.split-scroll-section {
   display: flex;
@@ -2023,6 +2058,14 @@ body {
   .home-guide-link {
     top: 1.5rem;
     font-size: 0.6rem;
+  }
+
+  .subpage-scroll-top-btn {
+    bottom: 1.25rem;
+    right: 1.25rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    font-size: 1.2rem;
   }
 
   .about-editorial-headline {
