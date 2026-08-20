@@ -361,6 +361,11 @@ export default function App() {
           <div className="subpage-bg-watermark right-watermark">
             <span>PRAMUDITHA NADUN | ABOUT</span>
           </div>
+          <div
+            className="about-bg-blurred-image"
+            style={{ backgroundImage: "url('/AboutSection.jpg')" }}
+            aria-hidden="true"
+          />
 
           {/* Subpage Header */}
           <div className="top-header-row">
@@ -377,30 +382,102 @@ export default function App() {
               <span>PR</span>
               <span>NA</span>
             </div>
-            <button className="theme-toggle-btn" onClick={() => navigateTo(prevPage)}>
-              ← Back
+              <button className="theme-toggle-btn" onClick={() => navigateTo(prevPage)}>
+                ‹ Back
             </button>
           </div>
 
-          {/* Subpage Intro */}
-          <h1 className="subpage-title">About Me</h1>
-          <p className="subpage-subtitle">Software Engineer & Designer</p>
+          {/* Editorial hero */}
+          <div className="about-hero-card">
+            
+            {/* Left Column: Index & Active Subcategory */}
+            <div className="about-card-left">
+              <span className="about-index-tag">/ 01</span>
+              <h3 className="about-category-heading">Enterprise Systems</h3>
+              <div className="about-category-underline"></div>
+              <ul className="about-category-list">
+                <li className="active" onClick={() => navigateTo('logic')}>Full-Stack &amp; UI/UX</li>
+                <li onClick={() => navigateTo('aesthetics')}>Cinematography & VFX</li>
+              </ul>
+            </div>
 
-          {/* Main About Me Layout */}
-          <div className="about-me-section">
-            <div className="about-me-column">
-              <h3 className="about-column-title">Who Am I</h3>
-              <p className="about-column-text">
-                I am a Software Engineer & Designer based in Sri Lanka, dedicated to building high-performance systems and clean digital user interfaces. Currently working as an Associate Software Engineer at LOLC Technologies, I focus on web architecture, code optimization, and collaborating on enterprise projects. I thrive on bringing logical design structures and visual precision to every codebase I build.
+            {/* Giant headline and bio hook */}
+            <div className="about-card-right">
+              <h2 className="about-card-headline">
+                <span>Code</span>
+                <span>Anywhere</span>
+              </h2>
+              <p className="about-card-desc">
+                Associate Software Engineer at LOLC Technologies crafting high-performance enterprise platforms, modern web architectures, and cinematic visual experiences for a new generation of scalable <button
+                  type="button"
+                  className="about-card-action"
+                  onClick={() => navigateTo('logic')}
+                >software solutions <span>›</span></button>
               </p>
             </div>
-            <div className="about-me-column">
-              <h3 className="about-column-title">Beyond Code</h3>
-              <p className="about-column-text">
-                My creativity extends far beyond the IDE. I am heavily involved in graphic layout architecture, VFX editing, Premiere/After Effects cinematography, and vector brand design. I draw deep creative energy from exploring nature, photography, and studying typographic art systems, continuously bridging technical engineering with artistic values.
-              </p>
-            </div>
+
           </div>
+
+          {/* Bottom Grid with 3 Separate Cards */}
+          <div className="about-bottom-grid">
+            
+            {/* Card 1: Experience & Base */}
+            <div className="about-subcard">
+              <div className="about-subcard-label">EXPERIENCE</div>
+              <div className="about-subcard-entries">
+                <div className="about-subcard-entry">
+                  <h4 className="about-entry-title">LOLC Technologies</h4>
+                  <p className="about-entry-meta">Fusion X · Associate SE (2024 - Present)</p>
+                </div>
+              </div>
+              <div className="about-subcard-pagination">
+                <span className="dot active"></span>
+                <span className="dot"></span>
+                <span className="dot"></span>
+              </div>
+            </div>
+
+            {/* Card 2: Background */}
+            <div className="about-subcard background-subcard">
+              <div className="about-subcard-label">BACKGROUND</div>
+              <div className="about-subcard-entry">
+                <h4 className="about-entry-title">Trainee SE &amp; Freelance</h4>
+                <p className="about-entry-meta">Fusion Team · Trainee SE (2022 - 2024)</p>
+                <p className="about-entry-copy">Figma UI systems, Java backend &amp; client fullstack apps</p>
+              </div>
+            </div>
+
+            {/* Card 3: Visual Snapshot / Thumbnail */}
+            <div 
+              className="about-subcard media-subcard"
+              onClick={() => navigateTo('aesthetics')}
+              title="View Aesthetics & Motion"
+            >
+              <div className="about-media-box">
+                <img src="/AboutSection.jpg" alt="Abstract workspace with code and visual references" className="about-media-image" />
+                <div className="about-media-info">
+                  <span className="about-media-tag">02 / VISUAL REEL</span>
+                  <span className="about-media-title">Aesthetics &amp; Motion</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 4: Beyond The Code */}
+            <div className="about-subcard">
+              <div className="about-subcard-label">BEYOND CODE</div>
+              <p className="about-subcard-text">
+                Graphic Designer crafting brand typography, avid Mountain Hiker exploring wilderness trails, and VFX CGI enthusiast.
+              </p>
+              <button 
+                className="about-subcard-link"
+                onClick={() => navigateTo('aesthetics')}
+              >
+                Explore Beyond Code <span>›</span>
+              </button>
+            </div>
+
+          </div>
+
         </div>
       </div>
     );
@@ -432,11 +509,8 @@ export default function App() {
             <span>NA</span>
           </div>
           <div className="header-buttons">
-            <button className="theme-toggle-btn" onClick={() => navigateTo('about')}>
-              About Me
-            </button>
             <button className="theme-toggle-btn" onClick={() => navigateTo('home')}>
-              Back to Portals
+              ‹ Back
             </button>
           </div>
         </div>
@@ -715,11 +789,8 @@ export default function App() {
             <span>NA</span>
           </div>
           <div className="header-buttons">
-            <button className="theme-toggle-btn" onClick={() => navigateTo('about')}>
-              About Me
-            </button>
             <button className="theme-toggle-btn" onClick={() => navigateTo('home')}>
-              Back to Portals
+              ‹ Back
             </button>
           </div>
         </div>
@@ -838,6 +909,15 @@ export default function App() {
               >
                 PRAMUDITHA
               </motion.h1>
+              <button
+                type="button"
+                className="home-about-cta-btn"
+                onClick={() => navigateTo('about')}
+              >
+                <span className="cta-dot" aria-hidden="true"></span>
+                <span>What's wrong with me?</span>
+                <span className="cta-arrow" aria-hidden="true">›</span>
+              </button>
             </div>
           </div>
 
