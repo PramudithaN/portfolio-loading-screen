@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
 import { Palette, Mountain, Clapperboard } from 'lucide-react'
+import VideoShowcase from './components/VideoShowcase'
 import './index.css'
 
 const skillsList = [
@@ -912,6 +913,9 @@ export default function App() {
         {/* Subpage Intro */}
         <h1 className="subpage-title">Aesthetics & Motion</h1>
         <p className="subpage-subtitle">Graphic Design & Cinematography</p>
+
+        {/* Video Showcase: Graphic Design / Video Editing reels */}
+        <VideoShowcase />
 
         {/* Work Grid */}
         <div className="work-grid">

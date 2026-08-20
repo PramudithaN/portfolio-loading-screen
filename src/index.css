@@ -1781,6 +1781,412 @@ body {
 
 
 /* ==========================================
+   VIDEO SHOWCASE (Aesthetics & Motion)
+   ========================================== */
+.video-showcase {
+  width: 100%;
+  max-width: 1100px;
+  margin-bottom: 4rem;
+  z-index: 10;
+}
+
+.showcase-tabs {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.4rem;
+}
+
+.showcase-tab-btn {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  color: rgba(17, 17, 17, 0.6);
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.showcase-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.85);
+  color: #111111;
+}
+
+.showcase-tab-btn.active {
+  background: var(--accent-red);
+  border-color: var(--accent-red);
+  color: #ffffff;
+}
+
+.showcase-hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9.4;
+  min-height: 560px;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #000000;
+}
+
+.showcase-thumbnail {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.showcase-video-el {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color: #000000;
+}
+
+.showcase-overlay-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.15) 45%, rgba(0, 0, 0, 0.35) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0) 22%, rgba(0, 0, 0, 0.1) 55%, rgba(0, 0, 0, 0.88) 100%);
+  pointer-events: none;
+}
+
+.showcase-rating {
+  position: absolute;
+  top: 1.6rem;
+  left: 1.8rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--accent-red-bright);
+  letter-spacing: 0.03em;
+  z-index: 2;
+}
+
+.showcase-rating::before {
+  content: 'RATING ';
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.7);
+  margin-right: 0.3rem;
+}
+
+.showcase-rating small {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.6rem;
+}
+
+.showcase-watchlist-btn {
+  position: absolute;
+  top: 1.7rem;
+  right: 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.showcase-watchlist-btn:hover {
+  color: var(--accent-red-bright);
+}
+
+.showcase-watchlist-btn svg {
+  font-size: 1.1rem;
+}
+
+.showcase-play-wrap {
+  position: absolute;
+  top: 34%;
+  left: 32%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  z-index: 2;
+}
+
+.showcase-duration {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.showcase-play-btn {
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  background: rgba(0, 0, 0, 0.35);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.showcase-play-btn:hover {
+  background: var(--accent-red);
+  border-color: var(--accent-red);
+  transform: scale(1.08);
+}
+
+.showcase-bottom {
+  position: absolute;
+  left: 1.8rem;
+  right: 1.8rem;
+  bottom: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  z-index: 2;
+}
+
+.showcase-info {
+  max-width: 60%;
+  color: #ffffff;
+}
+
+.showcase-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.showcase-tags span {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-red-bright);
+}
+
+.showcase-tags span:not(:last-child)::after {
+  content: '|';
+  margin-left: 0.6rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.showcase-title {
+  font-family: var(--font-wide);
+  font-size: 2.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+  margin-bottom: 0.7rem;
+}
+
+.showcase-credit {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 0.6rem;
+}
+
+.showcase-desc {
+  font-size: 0.72rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.showcase-related {
+  width: 100%;
+}
+
+.showcase-related-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+}
+
+.showcase-related-header span {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.showcase-related-nav {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.showcase-related-nav button {
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(0, 0, 0, 0.25);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.showcase-related-nav button:hover {
+  background: var(--accent-red);
+  border-color: var(--accent-red);
+}
+
+.showcase-related-track {
+  display: flex;
+  gap: 0.7rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 0.2rem;
+}
+
+.showcase-related-track::-webkit-scrollbar {
+  display: none;
+}
+
+.showcase-card {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-end;
+  width: 5.2rem;
+  aspect-ratio: 2 / 3;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  background: none;
+  scroll-snap-align: start;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.showcase-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.showcase-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+.showcase-card span {
+  position: relative;
+  z-index: 2;
+  color: #ffffff;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 0.4rem 0.4rem;
+  text-align: left;
+  line-height: 1.25;
+}
+
+.showcase-card:hover {
+  transform: translateY(-3px);
+}
+
+.showcase-card.active {
+  border-color: var(--accent-red);
+  box-shadow: 0 0 0 2px rgba(229, 29, 29, 0.35);
+}
+
+.showcase-close-btn {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(0, 0, 0, 0.55);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 3;
+  transition: all 0.3s ease;
+}
+
+.showcase-close-btn:hover {
+  background: var(--accent-red);
+  border-color: var(--accent-red);
+}
+
+@media (max-width: 900px) {
+  .showcase-hero {
+    aspect-ratio: auto;
+    min-height: 640px;
+  }
+
+  .showcase-bottom {
+    left: 1.4rem;
+    right: 1.4rem;
+  }
+
+  .showcase-info {
+    max-width: 100%;
+  }
+
+  .showcase-play-wrap {
+    left: 50%;
+  }
+}
+
+@media (max-width: 520px) {
+  .showcase-title {
+    font-size: 1.5rem;
+  }
+
+  .showcase-tabs {
+    flex-wrap: wrap;
+  }
+
+  .showcase-watchlist-btn span {
+    display: none;
+  }
+}
+
+/* ==========================================
    RESPONSIVE ADJUSTMENTS
    ========================================== */
 
