@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
-import Parser from 'rss-parser'
 
 interface ShowcaseReel {
   id: string
