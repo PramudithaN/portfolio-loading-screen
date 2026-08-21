@@ -2229,6 +2229,19 @@ body {
     height: auto;
   }
 
+  /* Make video/iframe visible on mobile when playing */
+  .showcase-video-el {
+    position: relative;
+    inset: unset;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+  }
+
+  .showcase-close-btn {
+    z-index: 10;
+  }
+
   .showcase-overlay-gradient {
     height: 100%;
   }
