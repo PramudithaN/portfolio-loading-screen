@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
+import Parser from 'rss-parser'
 
 interface ShowcaseReel {
   id: string
@@ -14,69 +15,71 @@ interface ShowcaseReel {
   videoUrl: string
 }
 
-// Mock reels using public sample video/image sources — swap with real work later.
-const designReels: ShowcaseReel[] = [
-  {
-    id: 'design-01',
-    title: 'Chromatic Bloom',
-    year: '2024',
-    duration: '1 MIN 12 SEC',
-    rating: '9.1',
-    role: 'Brand Identity / Motion',
-    tags: ['Branding', 'Typography', 'Motion'],
-    description: 'A generative brand reveal built from a modular type system, blending kinetic typography with layered color washes.',
-    thumbnail: 'https://picsum.photos/seed/design01/900/1600',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-  },
-  {
-    id: 'design-02',
-    title: 'Grid & Glass',
-    year: '2024',
-    duration: '0 MIN 48 SEC',
-    rating: '8.7',
-    role: 'Poster Series / Layout',
-    tags: ['Poster', 'Layout', 'Print'],
-    description: 'Minimalist poster series exploring negative space, grid discipline and glassmorphic texture overlays.',
-    thumbnail: 'https://picsum.photos/seed/design02/900/1600',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-  },
-  {
-    id: 'design-03',
-    title: 'Vector Palette',
-    year: '2023',
-    duration: '1 MIN 05 SEC',
-    rating: '8.4',
-    role: 'Visual System / Illustration',
-    tags: ['Illustration', 'Vector', 'Palette'],
-    description: 'A procedurally generated illustration set built around a restrained five-color palette and repeating vector motifs.',
-    thumbnail: 'https://picsum.photos/seed/design03/900/1600',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-  },
-  {
-    id: 'design-04',
-    title: 'Studio Type Specimen',
-    year: '2023',
-    duration: '0 MIN 55 SEC',
-    rating: '8.9',
-    role: 'Type Design / Specimen',
-    tags: ['Typeface', 'Specimen', 'Editorial'],
-    description: 'Custom typeface specimen animation showcasing weight, rhythm and optical spacing across editorial layouts.',
-    thumbnail: 'https://picsum.photos/seed/design04/900/1600',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-  },
-  {
-    id: 'design-05',
-    title: 'Generative Canvas',
-    year: '2022',
-    duration: '1 MIN 20 SEC',
-    rating: '8.2',
-    role: 'Interactive Art / Code',
-    tags: ['Generative', '3D', 'Loop'],
-    description: 'Procedural pattern loop rendered in real time, blurring the line between generative art and interface design.',
-    thumbnail: 'https://picsum.photos/seed/design05/900/1600',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-  },
-]
+const PINTEREST_USERNAME = 'ad0bep'
+const BOARD_NAMES = ['all-pins', 'manipulations', 'flyers', 'social']
+
+// const designReels: ShowcaseReel[] = [
+//   {
+//     id: 'design-01',
+//     title: 'Chromatic Bloom',
+//     year: '2024',
+//     duration: '1 MIN 12 SEC',
+//     rating: '9.1',
+//     role: 'Brand Identity / Motion',
+//     tags: ['Branding', 'Typography', 'Motion'],
+//     description: 'A generative brand reveal built from a modular type system, blending kinetic typography with layered color washes.',
+//     thumbnail: 'https://picsum.photos/seed/design01/900/1600',
+//     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+//   },
+//   {
+//     id: 'design-02',
+//     title: 'Grid & Glass',
+//     year: '2024',
+//     duration: '0 MIN 48 SEC',
+//     rating: '8.7',
+//     role: 'Poster Series / Layout',
+//     tags: ['Poster', 'Layout', 'Print'],
+//     description: 'Minimalist poster series exploring negative space, grid discipline and glassmorphic texture overlays.',
+//     thumbnail: 'https://picsum.photos/seed/design02/900/1600',
+//     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+//   },
+//   {
+//     id: 'design-03',
+//     title: 'Vector Palette',
+//     year: '2023',
+//     duration: '1 MIN 05 SEC',
+//     rating: '8.4',
+//     role: 'Visual System / Illustration',
+//     tags: ['Illustration', 'Vector', 'Palette'],
+//     description: 'A procedurally generated illustration set built around a restrained five-color palette and repeating vector motifs.',
+//     thumbnail: 'https://picsum.photos/seed/design03/900/1600',
+//     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+//   },
+//   {
+//     id: 'design-04',
+//     title: 'Studio Type Specimen',
+//     year: '2023',
+//     duration: '0 MIN 55 SEC',
+//     rating: '8.9',
+//     role: 'Type Design / Specimen',
+//     tags: ['Typeface', 'Specimen', 'Editorial'],
+//     description: 'Custom typeface specimen animation showcasing weight, rhythm and optical spacing across editorial layouts.',
+//     thumbnail: 'https://picsum.photos/seed/design04/900/1600',
+//     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+//   },
+//   {
+//     id: 'design-05',
+//     title: 'Generative Canvas',
+//     year: '2022',
+//     duration: '1 MIN 20 SEC',
+//     rating: '8.2',
+//     role: 'Interactive Art / Code',
+//     tags: ['Generative', '3D', 'Loop'],
+//     description: 'Procedural pattern loop rendered in real time, blurring the line between generative art and interface design.',
+//     thumbnail: 'https://picsum.photos/seed/design05/900/1600',
+//     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+//   },
+// ]
 
 const videoReels: ShowcaseReel[] = [
   {
@@ -144,27 +147,60 @@ const videoReels: ShowcaseReel[] = [
 export default function VideoShowcase() {
   const [activeVideoIndex, setActiveVideoIndex] = useState(0)
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
-  const [galleryImages, setGalleryImages] = useState<string[]>(
-    designReels.map((reel) => reel.thumbnail)
-  )
+  // const [galleryImages, setGalleryImages] = useState<string[]>([])
 
   const activeVideo = videoReels[activeVideoIndex]
 
-  useEffect(() => {
-    const fetchPinterestImages = async () => {
+ const [galleryImages, setGalleryImages] = useState<string[]>([])
+console.log(galleryImages,"galleryImages");
+
+useEffect(() => {
+  const fetchPinterestImages = async () => {
+    const fetchedImages: string[] = []
+
+    for (const board of BOARD_NAMES) {
+      // Use 'feed' for all pins, otherwise use the specific board name
+      const rssName = board === 'all-pins' ? 'feed' : board
+      const rawUrl = `https://www.pinterest.com/${PINTEREST_USERNAME}/${rssName}.rss`
+      
+      // rss2json avoids the 500 Internal Server errors you were getting
+      const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rawUrl)}`
+
       try {
-        const res = await fetch('/api/pinterest')
-        if (!res.ok) throw new Error('Pinterest API request failed')
+        const res = await fetch(proxyUrl)
+        if (!res.ok) continue
+        
         const data = await res.json()
-        if (Array.isArray(data.images) && data.images.length > 0) {
-          setGalleryImages(data.images.map((img: { src: string }) => img.src))
+
+        if (data.status !== 'ok') {
+          console.warn(`[${board}] Failed to load RSS:`, data.message)
+          continue
         }
-      } catch {
-        // Keep the thumbnail fallback images if the Pinterest feed is unavailable
+
+        data.items.forEach((item: any) => {
+          // Improved regex to grab the image src reliably
+          const imgSrcMatch = item.description.match(/<img[^>]+src=["']([^"']+)["']/i)
+
+          if (imgSrcMatch) {
+            let src = imgSrcMatch[1]
+            // Upgrade image resolution to high-quality original
+            src = src.replace(/\/\d+x\//, '/originals/')
+            fetchedImages.push(src)
+          }
+        })
+      } catch (error) {
+        console.error(`[${board}] Failed to fetch feed:`, error)
       }
     }
-    fetchPinterestImages()
-  }, [])
+
+    if (fetchedImages.length > 0) {
+      // Use a Set to strip out any duplicate pins shared across boards
+      setGalleryImages([...new Set(fetchedImages)])
+    }
+  }
+
+  fetchPinterestImages()
+}, [])
 
   const selectVideoReel = (index: number) => {
     if (index === activeVideoIndex) return
@@ -175,9 +211,10 @@ export default function VideoShowcase() {
   const videoTrackRef = useRef<HTMLDivElement>(null)
 
   const scrollVideoRelated = (direction: 'left' | 'right') => {
-    const nextIndex = direction === 'left'
-      ? Math.max(0, activeVideoIndex - 1)
-      : Math.min(videoReels.length - 1, activeVideoIndex + 1)
+    const nextIndex =
+      direction === 'left'
+        ? Math.max(0, activeVideoIndex - 1)
+        : Math.min(videoReels.length - 1, activeVideoIndex + 1)
     if (nextIndex === activeVideoIndex) return
     setActiveVideoIndex(nextIndex)
     setIsVideoPlaying(false)
@@ -285,7 +322,6 @@ export default function VideoShowcase() {
           )}
         </div>
 
-        {/* Hidden on desktop while the video is playing */}
         <div className={`showcase-bottom${isVideoPlaying ? ' is-playing' : ''}`}>
           <div className="showcase-info">
             <div className="showcase-tags">
