@@ -17,69 +17,6 @@ interface ShowcaseReel {
 const PINTEREST_USERNAME = 'ad0bep'
 const BOARD_NAMES = ['all-pins', 'manipulations', 'flyers', 'social']
 
-// const designReels: ShowcaseReel[] = [
-//   {
-//     id: 'design-01',
-//     title: 'Chromatic Bloom',
-//     year: '2024',
-//     duration: '1 MIN 12 SEC',
-//     rating: '9.1',
-//     role: 'Brand Identity / Motion',
-//     tags: ['Branding', 'Typography', 'Motion'],
-//     description: 'A generative brand reveal built from a modular type system, blending kinetic typography with layered color washes.',
-//     thumbnail: 'https://picsum.photos/seed/design01/900/1600',
-//     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-//   },
-//   {
-//     id: 'design-02',
-//     title: 'Grid & Glass',
-//     year: '2024',
-//     duration: '0 MIN 48 SEC',
-//     rating: '8.7',
-//     role: 'Poster Series / Layout',
-//     tags: ['Poster', 'Layout', 'Print'],
-//     description: 'Minimalist poster series exploring negative space, grid discipline and glassmorphic texture overlays.',
-//     thumbnail: 'https://picsum.photos/seed/design02/900/1600',
-//     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-//   },
-//   {
-//     id: 'design-03',
-//     title: 'Vector Palette',
-//     year: '2023',
-//     duration: '1 MIN 05 SEC',
-//     rating: '8.4',
-//     role: 'Visual System / Illustration',
-//     tags: ['Illustration', 'Vector', 'Palette'],
-//     description: 'A procedurally generated illustration set built around a restrained five-color palette and repeating vector motifs.',
-//     thumbnail: 'https://picsum.photos/seed/design03/900/1600',
-//     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-//   },
-//   {
-//     id: 'design-04',
-//     title: 'Studio Type Specimen',
-//     year: '2023',
-//     duration: '0 MIN 55 SEC',
-//     rating: '8.9',
-//     role: 'Type Design / Specimen',
-//     tags: ['Typeface', 'Specimen', 'Editorial'],
-//     description: 'Custom typeface specimen animation showcasing weight, rhythm and optical spacing across editorial layouts.',
-//     thumbnail: 'https://picsum.photos/seed/design04/900/1600',
-//     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-//   },
-//   {
-//     id: 'design-05',
-//     title: 'Generative Canvas',
-//     year: '2022',
-//     duration: '1 MIN 20 SEC',
-//     rating: '8.2',
-//     role: 'Interactive Art / Code',
-//     tags: ['Generative', '3D', 'Loop'],
-//     description: 'Procedural pattern loop rendered in real time, blurring the line between generative art and interface design.',
-//     thumbnail: 'https://picsum.photos/seed/design05/900/1600',
-//     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-//   },
-// ]
-
 const videoReels: ShowcaseReel[] = [
   {
     id: 'video-01',
@@ -146,12 +83,10 @@ const videoReels: ShowcaseReel[] = [
 export default function VideoShowcase() {
   const [activeVideoIndex, setActiveVideoIndex] = useState(0)
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
-  // const [galleryImages, setGalleryImages] = useState<string[]>([])
 
   const activeVideo = videoReels[activeVideoIndex]
 
  const [galleryImages, setGalleryImages] = useState<string[]>([])
-console.log(galleryImages,"galleryImages");
 
 useEffect(() => {
   const fetchPinterestImages = async () => {
