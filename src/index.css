@@ -205,6 +205,8 @@ body {
 }
 
 .home-about-cta-btn {
+  position: relative;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
@@ -343,6 +345,8 @@ body {
   white-space: nowrap;
   display: inline-block;
   text-shadow: 0 10px 45px rgba(0, 0, 0, 0.95);
+  /* scaleY visually overflows the layout box and can otherwise steal clicks from the CTA button below it */
+  pointer-events: none;
 }
 
 /* Bottom Section */
