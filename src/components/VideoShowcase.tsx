@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 
 interface ShowcaseReel {
@@ -141,41 +141,48 @@ const videoReels: ShowcaseReel[] = [
   },
 ]
 
-type ShowcaseTab = 'design' | 'video'
-
 export default function VideoShowcase() {
-  const [tab, setTab] = useState<ShowcaseTab>('design')
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [activeVideoIndex, setActiveVideoIndex] = useState(0)
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
+  const [galleryImages, setGalleryImages] = useState<string[]>(
+    designReels.map((reel) => reel.thumbnail)
+  )
 
-  const reels = tab === 'design' ? designReels : videoReels
-  const active = reels[activeIndex]
+  const activeVideo = videoReels[activeVideoIndex]
 
-  const selectTab = (nextTab: ShowcaseTab) => {
-    if (nextTab === tab) return
-    setTab(nextTab)
-    setActiveIndex(0)
-    setIsPlaying(false)
+  useEffect(() => {
+    const fetchPinterestImages = async () => {
+      try {
+        const res = await fetch('/api/pinterest')
+        if (!res.ok) throw new Error('Pinterest API request failed')
+        const data = await res.json()
+        if (Array.isArray(data.images) && data.images.length > 0) {
+          setGalleryImages(data.images.map((img: { src: string }) => img.src))
+        }
+      } catch {
+        // Keep the thumbnail fallback images if the Pinterest feed is unavailable
+      }
+    }
+    fetchPinterestImages()
+  }, [])
+
+  const selectVideoReel = (index: number) => {
+    if (index === activeVideoIndex) return
+    setActiveVideoIndex(index)
+    setIsVideoPlaying(false)
   }
 
-  const selectReel = (index: number) => {
-    if (index === activeIndex) return
-    setActiveIndex(index)
-    setIsPlaying(false)
-  }
+  const videoTrackRef = useRef<HTMLDivElement>(null)
 
-  const trackRef = useRef<HTMLDivElement>(null)
-
-  const scrollRelated = (direction: 'left' | 'right') => {
+  const scrollVideoRelated = (direction: 'left' | 'right') => {
     const nextIndex = direction === 'left'
-      ? Math.max(0, activeIndex - 1)
-      : Math.min(reels.length - 1, activeIndex + 1)
-    if (nextIndex === activeIndex) return
-    setActiveIndex(nextIndex)
-    setIsPlaying(false)
+      ? Math.max(0, activeVideoIndex - 1)
+      : Math.min(videoReels.length - 1, activeVideoIndex + 1)
+    if (nextIndex === activeVideoIndex) return
+    setActiveVideoIndex(nextIndex)
+    setIsVideoPlaying(false)
 
-    // Scroll only the track, not the whole page
-    const track = trackRef.current
+    const track = videoTrackRef.current
     if (!track) return
     const card = track.children[nextIndex] as HTMLElement
     if (card) {
@@ -191,73 +198,68 @@ export default function VideoShowcase() {
 
   const isYouTube = (url: string) => /youtu\.?be/.test(url)
 
-  // Swipe support
-  const touchStartX = useRef(0)
-  const touchEndX = useRef(0)
+  const videoTouchStartX = useRef(0)
+  const videoTouchEndX = useRef(0)
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX
+  const handleVideoTouchStart = (e: React.TouchEvent) => {
+    videoTouchStartX.current = e.touches[0].clientX
   }
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.touches[0].clientX
+  const handleVideoTouchMove = (e: React.TouchEvent) => {
+    videoTouchEndX.current = e.touches[0].clientX
   }
 
-  const handleTouchEnd = () => {
-    const diff = touchStartX.current - touchEndX.current
+  const handleVideoTouchEnd = () => {
+    const diff = videoTouchStartX.current - videoTouchEndX.current
     const threshold = 50
     if (Math.abs(diff) > threshold) {
-      scrollRelated(diff > 0 ? 'right' : 'left')
+      scrollVideoRelated(diff > 0 ? 'right' : 'left')
     }
   }
 
   return (
     <div className="video-showcase">
-      <div className="showcase-tabs">
-        <button
-          type="button"
-          className={`showcase-tab-btn${tab === 'design' ? ' active' : ''}`}
-          onClick={() => selectTab('design')}
-        >
-          Graphic Design
-        </button>
-        <button
-          type="button"
-          className={`showcase-tab-btn${tab === 'video' ? ' active' : ''}`}
-          onClick={() => selectTab('video')}
-        >
-          Video Editing
-        </button>
+      {/* Pinterest pins — Instagram-style grid */}
+      <div className="showcase-instagram-grid">
+        {galleryImages.map((src, index) => (
+          <div className="showcase-grid-post" key={index}>
+            <img src={src} alt="" loading="lazy" />
+          </div>
+        ))}
+      </div>
+
+      <div className="showcase-section-break">
+        <span>Video Editing</span>
       </div>
 
       <div className="showcase-hero">
         <div className="showcase-media-area">
-          {isPlaying ? (
+          {isVideoPlaying ? (
             <>
-              {isYouTube(active.videoUrl) ? (
+              {isYouTube(activeVideo.videoUrl) ? (
                 <iframe
-                  key={active.id}
+                  key={activeVideo.id}
                   className="showcase-video-el"
-                  src={getYouTubeEmbedUrl(active.videoUrl)!}
-                  title={active.title}
+                  src={getYouTubeEmbedUrl(activeVideo.videoUrl)!}
+                  title={activeVideo.title}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   style={{ border: 'none' }}
                 />
               ) : (
                 <video
-                  key={active.id}
+                  key={activeVideo.id}
                   className="showcase-video-el"
-                  src={active.videoUrl}
+                  src={activeVideo.videoUrl}
                   controls
                   autoPlay
-                  onEnded={() => setIsPlaying(false)}
+                  onEnded={() => setIsVideoPlaying(false)}
                 />
               )}
               <button
                 type="button"
                 className="showcase-close-btn"
-                onClick={() => setIsPlaying(false)}
+                onClick={() => setIsVideoPlaying(false)}
                 aria-label="Close video"
               >
                 <Icon icon="mdi:close" />
@@ -265,16 +267,16 @@ export default function VideoShowcase() {
             </>
           ) : (
             <>
-              <img className="showcase-thumbnail" src={active.thumbnail} alt={active.title} />
+              <img className="showcase-thumbnail" src={activeVideo.thumbnail} alt={activeVideo.title} />
               <div className="showcase-overlay-gradient" />
 
               <div className="showcase-play-wrap">
-                <span className="showcase-duration">{active.duration}</span>
+                <span className="showcase-duration">{activeVideo.duration}</span>
                 <button
                   type="button"
                   className="showcase-play-btn"
-                  onClick={() => setIsPlaying(true)}
-                  aria-label={`Play ${active.title}`}
+                  onClick={() => setIsVideoPlaying(true)}
+                  aria-label={`Play ${activeVideo.title}`}
                 >
                   <Icon icon="mdi:play" />
                 </button>
@@ -283,45 +285,46 @@ export default function VideoShowcase() {
           )}
         </div>
 
-        <div className="showcase-bottom">
+        {/* Hidden on desktop while the video is playing */}
+        <div className={`showcase-bottom${isVideoPlaying ? ' is-playing' : ''}`}>
           <div className="showcase-info">
             <div className="showcase-tags">
-              {active.tags.map((tag) => (
+              {activeVideo.tags.map((tag) => (
                 <span key={tag}>{tag}</span>
               ))}
             </div>
-            <h3 className="showcase-title">{active.title}</h3>
+            <h3 className="showcase-title">{activeVideo.title}</h3>
             <p className="showcase-credit">
-              <strong>{active.year}</strong> &nbsp;|&nbsp; <strong>{active.role}</strong>
+              <strong>{activeVideo.year}</strong> &nbsp;|&nbsp; <strong>{activeVideo.role}</strong>
             </p>
-            <p className="showcase-desc">{active.description}</p>
+            <p className="showcase-desc">{activeVideo.description}</p>
           </div>
 
           <div className="showcase-related">
             <div className="showcase-related-header">
               <span>On Next</span>
               <div className="showcase-related-nav">
-                <button type="button" onClick={() => scrollRelated('left')} aria-label="Scroll left">
+                <button type="button" onClick={() => scrollVideoRelated('left')} aria-label="Scroll left">
                   <Icon icon="mdi:chevron-left" />
                 </button>
-                <button type="button" onClick={() => scrollRelated('right')} aria-label="Scroll right">
+                <button type="button" onClick={() => scrollVideoRelated('right')} aria-label="Scroll right">
                   <Icon icon="mdi:chevron-right" />
                 </button>
               </div>
             </div>
             <div
               className="showcase-related-track"
-              ref={trackRef}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
+              ref={videoTrackRef}
+              onTouchStart={handleVideoTouchStart}
+              onTouchMove={handleVideoTouchMove}
+              onTouchEnd={handleVideoTouchEnd}
             >
-              {reels.map((reel, index) => (
+              {videoReels.map((reel, index) => (
                 <button
                   type="button"
                   key={reel.id}
-                  className={`showcase-card${index === activeIndex ? ' active' : ''}`}
-                  onClick={() => selectReel(index)}
+                  className={`showcase-card${index === activeVideoIndex ? ' active' : ''}`}
+                  onClick={() => selectVideoReel(index)}
                 >
                   <img src={reel.thumbnail} alt={reel.title} />
                   <span>{reel.title}</span>

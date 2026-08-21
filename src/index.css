@@ -964,6 +964,15 @@ body {
   gap: 0.25rem;
 }
 
+.about-background-image {
+  width: auto;
+  max-width: 60%;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 4px;
+  margin: 0.85rem 0;
+}
+
 .about-entry-title {
   font-family: var(--font-sans);
   color: #171719;
@@ -1700,6 +1709,48 @@ body {
   text-align: center;
 }
 
+/* Sliding image banner (Aesthetics section) */
+.aesthetics-banner {
+  width: 100%;
+  max-width: 1150px;
+  overflow: hidden;
+  margin: 0 0 4rem;
+  z-index: 10;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.aesthetics-banner-track {
+  display: flex;
+  width: max-content;
+  gap: 1rem;
+  animation: aestheticsBannerScroll 28s linear infinite;
+}
+
+.aesthetics-banner:hover .aesthetics-banner-track {
+  animation-play-state: paused;
+}
+
+.aesthetics-banner-img {
+  width: 260px;
+  height: 165px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+@keyframes aestheticsBannerScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (max-width: 640px) {
+  .aesthetics-banner-img {
+    width: 170px;
+    height: 108px;
+  }
+}
+
 /* Subpage Work Grid */
 .work-grid {
   display: grid;
@@ -1792,38 +1843,6 @@ body {
   max-width: 1100px;
   margin-bottom: 4rem;
   z-index: 10;
-}
-
-.showcase-tabs {
-  display: flex;
-  gap: 0.6rem;
-  margin-bottom: 1.4rem;
-}
-
-.showcase-tab-btn {
-  font-family: var(--font-sans);
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  background: rgba(255, 255, 255, 0.45);
-  border: 1px solid rgba(0, 0, 0, 0.07);
-  color: rgba(17, 17, 17, 0.6);
-  padding: 0.7rem 1.4rem;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.showcase-tab-btn:hover {
-  background: rgba(255, 255, 255, 0.85);
-  color: #111111;
-}
-
-.showcase-tab-btn.active {
-  background: var(--accent-red);
-  border-color: var(--accent-red);
-  color: #ffffff;
 }
 
 .showcase-hero {
@@ -1975,6 +1994,15 @@ body {
   flex-direction: column;
   gap: 1.1rem;
   z-index: 2;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+@media (min-width: 901px) {
+  .showcase-bottom.is-playing {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 
 .showcase-info {
@@ -2165,6 +2193,60 @@ body {
   border-color: var(--accent-red);
 }
 
+/* Pinterest pins — Instagram-style grid */
+.showcase-instagram-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.3rem;
+  width: 100%;
+}
+
+.showcase-grid-post {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.showcase-grid-post img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.showcase-grid-post:hover img {
+  transform: scale(1.05);
+}
+
+/* Section break between the feed and the video editing cards */
+.showcase-section-break {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 3rem 0 2rem;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-red);
+}
+
+.showcase-section-break::before,
+.showcase-section-break::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 640px) {
+  .showcase-instagram-grid {
+    gap: 0.15rem;
+  }
+}
+
 @media (max-width: 900px) {
   .showcase-hero {
     aspect-ratio: auto;
@@ -2210,16 +2292,6 @@ body {
 @media (max-width: 640px) {
   .video-showcase {
     margin-bottom: 2.5rem;
-  }
-
-  .showcase-tabs {
-    gap: 0.4rem;
-    margin-bottom: 1rem;
-  }
-
-  .showcase-tab-btn {
-    font-size: 0.55rem;
-    padding: 0.55rem 1rem;
   }
 
   .showcase-hero {

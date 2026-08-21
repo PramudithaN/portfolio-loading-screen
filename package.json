@@ -14,7 +14,8 @@
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.33.0",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "rss-parser": "^3.13.0"
   },
   "devDependencies": {
     "@types/node": "^24.13.2",

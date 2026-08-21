@@ -20,6 +20,16 @@ const skillsList = [
   { text: "Git", logo: "mdi:git" }
 ]
 
+// Mock images for the sliding banner — swap with real design/photo work later.
+const aestheticsBannerImages = [
+  'https://picsum.photos/seed/aesthetic01/500/320',
+  'https://picsum.photos/seed/aesthetic02/500/320',
+  'https://picsum.photos/seed/aesthetic03/500/320',
+  'https://picsum.photos/seed/aesthetic04/500/320',
+  'https://picsum.photos/seed/aesthetic05/500/320',
+  'https://picsum.photos/seed/aesthetic06/500/320',
+]
+
 const experienceData = [
   {
     company: "LOLC Technologies",
@@ -378,7 +388,7 @@ export default function App() {
   // Slice displayed repositories
   const displayedOtherRepos = otherReposExpanded 
     ? otherRepos 
-    : otherRepos.slice(0, 4);
+    : otherRepos.slice(0, 6);
 
   const activeExperience = experienceData[activeExperienceIndex]
 
@@ -504,6 +514,7 @@ export default function App() {
             {/* Card 2: Background */}
             <div className="about-subcard background-subcard">
               <div className="about-subcard-label">BACKGROUND</div>
+              <img src="/UOW.png" alt="University of Westminster" className="about-background-image" />
               <div className="about-subcard-entry">
                 <h4 className="about-entry-title">University of Westminster</h4>
                 <p className="about-entry-meta">Undergraduate · Software Engineering</p>
