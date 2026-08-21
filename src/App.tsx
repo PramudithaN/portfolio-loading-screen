@@ -20,15 +20,6 @@ const skillsList = [
   { text: "Git", logo: "mdi:git" }
 ]
 
-// Mock images for the sliding banner — swap with real design/photo work later.
-const aestheticsBannerImages = [
-  'https://picsum.photos/seed/aesthetic01/500/320',
-  'https://picsum.photos/seed/aesthetic02/500/320',
-  'https://picsum.photos/seed/aesthetic03/500/320',
-  'https://picsum.photos/seed/aesthetic04/500/320',
-  'https://picsum.photos/seed/aesthetic05/500/320',
-  'https://picsum.photos/seed/aesthetic06/500/320',
-]
 
 const experienceData = [
   {
