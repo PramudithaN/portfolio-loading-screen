@@ -231,102 +231,105 @@ export default function VideoShowcase() {
       </div>
 
       <div className="showcase-hero">
-        {isPlaying ? (
-          <>
-            {isYouTube(active.videoUrl) ? (
-              <iframe
-                key={active.id}
-                className="showcase-video-el"
-                src={getYouTubeEmbedUrl(active.videoUrl)!}
-                title={active.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                style={{ border: 'none' }}
-              />
-            ) : (
-              <video
-                key={active.id}
-                className="showcase-video-el"
-                src={active.videoUrl}
-                controls
-                autoPlay
-                onEnded={() => setIsPlaying(false)}
-              />
-            )}
-            <button
-              type="button"
-              className="showcase-close-btn"
-              onClick={() => setIsPlaying(false)}
-              aria-label="Close video"
-            >
-              <Icon icon="mdi:close" />
-            </button>
-          </>
-        ) : (
-          <>
-            <img className="showcase-thumbnail" src={active.thumbnail} alt={active.title} />
-            <div className="showcase-overlay-gradient" />
-
-
-
-            <div className="showcase-play-wrap">
-              <span className="showcase-duration">{active.duration}</span>
+        <div className="showcase-media-area">
+          {isPlaying ? (
+            <>
+              {isYouTube(active.videoUrl) ? (
+                <iframe
+                  key={active.id}
+                  className="showcase-video-el"
+                  src={getYouTubeEmbedUrl(active.videoUrl)!}
+                  title={active.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{ border: 'none' }}
+                />
+              ) : (
+                <video
+                  key={active.id}
+                  className="showcase-video-el"
+                  src={active.videoUrl}
+                  controls
+                  autoPlay
+                  onEnded={() => setIsPlaying(false)}
+                />
+              )}
               <button
                 type="button"
-                className="showcase-play-btn"
-                onClick={() => setIsPlaying(true)}
-                aria-label={`Play ${active.title}`}
+                className="showcase-close-btn"
+                onClick={() => setIsPlaying(false)}
+                aria-label="Close video"
               >
-                <Icon icon="mdi:play" />
+                <Icon icon="mdi:close" />
               </button>
-            </div>
+            </>
+          ) : (
+            <>
+              <img className="showcase-thumbnail" src={active.thumbnail} alt={active.title} />
+              <div className="showcase-overlay-gradient" />
 
-            <div className="showcase-bottom">
-              <div className="showcase-info">
-                <div className="showcase-tags">
-                  {active.tags.map((tag) => (
-                    <span key={tag}>{tag}</span>
-                  ))}
-                </div>
-                <h3 className="showcase-title">{active.title}</h3>
-                <p className="showcase-credit">
-                  <strong>{active.year}</strong> &nbsp;|&nbsp; <strong>{active.role}</strong>
-                </p>
-                <p className="showcase-desc">{active.description}</p>
-              </div>
-
-              <div className="showcase-related">
-                <div className="showcase-related-header">
-                  <span>On Next</span>
-                  <div className="showcase-related-nav">
-                    <button type="button" onClick={() => scrollRelated('left')} aria-label="Scroll left">
-                      <Icon icon="mdi:chevron-left" />
-                    </button>
-                    <button type="button" onClick={() => scrollRelated('right')} aria-label="Scroll right">
-                      <Icon icon="mdi:chevron-right" />
-                    </button>
-                  </div>
-                </div>
-                <div
-                  className="showcase-related-track"
-                  ref={trackRef}
+              <div className="showcase-play-wrap">
+                <span className="showcase-duration">{active.duration}</span>
+                <button
+                  type="button"
+                  className="showcase-play-btn"
+                  onClick={() => setIsPlaying(true)}
+                  aria-label={`Play ${active.title}`}
                 >
-                  {reels.map((reel, index) => (
-                    <button
-                      type="button"
-                      key={reel.id}
-                      className={`showcase-card${index === activeIndex ? ' active' : ''}`}
-                      onClick={() => selectReel(index)}
-                    >
-                      <img src={reel.thumbnail} alt={reel.title} />
-                      <span>{reel.title}</span>
-                    </button>
-                  ))}
-                </div>
+                  <Icon icon="mdi:play" />
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="showcase-bottom">
+          <div className="showcase-info">
+            <div className="showcase-tags">
+              {active.tags.map((tag) => (
+                <span key={tag}>{tag}</span>
+              ))}
+            </div>
+            <h3 className="showcase-title">{active.title}</h3>
+            <p className="showcase-credit">
+              <strong>{active.year}</strong> &nbsp;|&nbsp; <strong>{active.role}</strong>
+            </p>
+            <p className="showcase-desc">{active.description}</p>
+          </div>
+
+          <div className="showcase-related">
+            <div className="showcase-related-header">
+              <span>On Next</span>
+              <div className="showcase-related-nav">
+                <button type="button" onClick={() => scrollRelated('left')} aria-label="Scroll left">
+                  <Icon icon="mdi:chevron-left" />
+                </button>
+                <button type="button" onClick={() => scrollRelated('right')} aria-label="Scroll right">
+                  <Icon icon="mdi:chevron-right" />
+                </button>
               </div>
             </div>
-          </>
-        )}
+            <div
+              className="showcase-related-track"
+              ref={trackRef}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
+              {reels.map((reel, index) => (
+                <button
+                  type="button"
+                  key={reel.id}
+                  className={`showcase-card${index === activeIndex ? ' active' : ''}`}
+                  onClick={() => selectReel(index)}
+                >
+                  <img src={reel.thumbnail} alt={reel.title} />
+                  <span>{reel.title}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
