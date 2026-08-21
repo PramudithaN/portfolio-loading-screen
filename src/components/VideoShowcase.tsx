@@ -74,7 +74,7 @@ const designReels: ShowcaseReel[] = [
     tags: ['Generative', '3D', 'Loop'],
     description: 'Procedural pattern loop rendered in real time, blurring the line between generative art and interface design.',
     thumbnail: 'https://picsum.photos/seed/design05/900/1600',
-    videoUrl: 'https://youtu.be/rtwIa1_t3vo',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
   },
 ]
 
@@ -113,7 +113,7 @@ const videoReels: ShowcaseReel[] = [
     tags: ['Cinematic', 'Product', 'Sound'],
     description: 'A moody, cinematic product reel edited to a custom sound design bed, built around slow reveals and hard cuts.',
     thumbnail: 'https://img.youtube.com/vi/VW9Fo3Bu_3w/hqdefault.jpg',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+    videoUrl: 'https://youtu.be/VW9Fo3Bu_3w',
   },
   {
     id: 'video-04',
