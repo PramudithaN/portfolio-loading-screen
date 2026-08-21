@@ -74,7 +74,7 @@ const designReels: ShowcaseReel[] = [
     tags: ['Generative', '3D', 'Loop'],
     description: 'Procedural pattern loop rendered in real time, blurring the line between generative art and interface design.',
     thumbnail: 'https://picsum.photos/seed/design05/900/1600',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+    videoUrl: 'https://youtu.be/rtwIa1_t3vo',
   },
 ]
 
@@ -88,8 +88,8 @@ const videoReels: ShowcaseReel[] = [
     role: 'Editing / Color Grade',
     tags: ['Promo', 'Color Grade', 'Sound Design'],
     description: 'A fast-cut editorial promo balancing rhythmic pacing with a warm cinematic grade for a product launch.',
-    thumbnail: 'https://picsum.photos/seed/video01/900/1600',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    thumbnail: 'https://img.youtube.com/vi/RoTm7wOD1uI/hqdefault.jpg',
+    videoUrl: 'https://youtu.be/RoTm7wOD1uI?si=p7yh3vy9IpPD6JNU',
   },
   {
     id: 'video-02',
@@ -100,8 +100,8 @@ const videoReels: ShowcaseReel[] = [
     role: 'Motion Editing / VFX',
     tags: ['Kinetic Type', 'VFX', 'Reel'],
     description: 'Typography-led motion story built for social, layering VFX transitions with punchy kinetic type cues.',
-    thumbnail: 'https://picsum.photos/seed/video02/900/1600',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    thumbnail: 'https://img.youtube.com/vi/yMo2v7vhQ6M/hqdefault.jpg',
+    videoUrl: 'https://youtu.be/yMo2v7vhQ6M?si=-lNpvPfOsnoAIvI_',
   },
   {
     id: 'video-03',
@@ -112,7 +112,7 @@ const videoReels: ShowcaseReel[] = [
     role: 'Editing / Sound',
     tags: ['Cinematic', 'Product', 'Sound'],
     description: 'A moody, cinematic product reel edited to a custom sound design bed, built around slow reveals and hard cuts.',
-    thumbnail: 'https://picsum.photos/seed/video03/900/1600',
+    thumbnail: 'https://img.youtube.com/vi/VW9Fo3Bu_3w/hqdefault.jpg',
     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
   },
   {
@@ -124,8 +124,8 @@ const videoReels: ShowcaseReel[] = [
     role: 'Color Grading / Editing',
     tags: ['Travel', 'Color Grade', 'Documentary'],
     description: 'Documentary-style travel edit with a custom LUT pass, balancing natural tones against saturated highlights.',
-    thumbnail: 'https://picsum.photos/seed/video04/900/1600',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+    thumbnail: 'https://img.youtube.com/vi/PRnL75jAY3s/hqdefault.jpg',
+    videoUrl: 'https://youtu.be/PRnL75jAY3s',
   },
   {
     id: 'video-05',
@@ -136,8 +136,8 @@ const videoReels: ShowcaseReel[] = [
     role: 'Editing / VFX',
     tags: ['Automotive', 'VFX', 'Reel'],
     description: 'High-energy automotive showreel combining speed-ramped cuts with layered VFX light trails.',
-    thumbnail: 'https://picsum.photos/seed/video05/900/1600',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
+    thumbnail: 'https://img.youtube.com/vi/rtwIa1_t3vo/hqdefault.jpg',
+    videoUrl: 'https://youtu.be/rtwIa1_t3vo',
   },
 ]
 
@@ -167,9 +167,48 @@ export default function VideoShowcase() {
   const trackRef = useRef<HTMLDivElement>(null)
 
   const scrollRelated = (direction: 'left' | 'right') => {
+    const nextIndex = direction === 'left'
+      ? Math.max(0, activeIndex - 1)
+      : Math.min(reels.length - 1, activeIndex + 1)
+    if (nextIndex === activeIndex) return
+    setActiveIndex(nextIndex)
+    setIsPlaying(false)
+
+    // Scroll only the track, not the whole page
     const track = trackRef.current
     if (!track) return
-    track.scrollBy({ left: direction === 'left' ? -260 : 260, behavior: 'smooth' })
+    const card = track.children[nextIndex] as HTMLElement
+    if (card) {
+      const scrollLeft = card.offsetLeft - track.offsetWidth / 2 + card.offsetWidth / 2
+      track.scrollTo({ left: scrollLeft, behavior: 'smooth' })
+    }
+  }
+
+  const getYouTubeEmbedUrl = (url: string): string | null => {
+    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^?&/]+)/)
+    return match ? `https://www.youtube.com/embed/${match[1]}?autoplay=1` : null
+  }
+
+  const isYouTube = (url: string) => /youtu\.?be/.test(url)
+
+  // Swipe support
+  const touchStartX = useRef(0)
+  const touchEndX = useRef(0)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX
+  }
+
+  const handleTouchEnd = () => {
+    const diff = touchStartX.current - touchEndX.current
+    const threshold = 50
+    if (Math.abs(diff) > threshold) {
+      scrollRelated(diff > 0 ? 'right' : 'left')
+    }
   }
 
   return (
@@ -194,14 +233,26 @@ export default function VideoShowcase() {
       <div className="showcase-hero">
         {isPlaying ? (
           <>
-            <video
-              key={active.id}
-              className="showcase-video-el"
-              src={active.videoUrl}
-              controls
-              autoPlay
-              onEnded={() => setIsPlaying(false)}
-            />
+            {isYouTube(active.videoUrl) ? (
+              <iframe
+                key={active.id}
+                className="showcase-video-el"
+                src={getYouTubeEmbedUrl(active.videoUrl)!}
+                title={active.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{ border: 'none' }}
+              />
+            ) : (
+              <video
+                key={active.id}
+                className="showcase-video-el"
+                src={active.videoUrl}
+                controls
+                autoPlay
+                onEnded={() => setIsPlaying(false)}
+              />
+            )}
             <button
               type="button"
               className="showcase-close-btn"
@@ -216,14 +267,7 @@ export default function VideoShowcase() {
             <img className="showcase-thumbnail" src={active.thumbnail} alt={active.title} />
             <div className="showcase-overlay-gradient" />
 
-            <div className="showcase-rating">
-              {active.rating}<small> / 10</small>
-            </div>
 
-            <button type="button" className="showcase-watchlist-btn">
-              <Icon icon="mdi:heart-outline" />
-              <span>Add to Watchlist</span>
-            </button>
 
             <div className="showcase-play-wrap">
               <span className="showcase-duration">{active.duration}</span>
@@ -253,7 +297,7 @@ export default function VideoShowcase() {
 
               <div className="showcase-related">
                 <div className="showcase-related-header">
-                  <span>People Also Liked</span>
+                  <span>On Next</span>
                   <div className="showcase-related-nav">
                     <button type="button" onClick={() => scrollRelated('left')} aria-label="Scroll left">
                       <Icon icon="mdi:chevron-left" />
@@ -263,7 +307,10 @@ export default function VideoShowcase() {
                     </button>
                   </div>
                 </div>
-                <div className="showcase-related-track" ref={trackRef}>
+                <div
+                  className="showcase-related-track"
+                  ref={trackRef}
+                >
                   {reels.map((reel, index) => (
                     <button
                       type="button"
