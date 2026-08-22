@@ -1012,16 +1012,19 @@ export default function App() {
           <a href="https://github.com/PramudithaN" target="_blank" rel="noopener noreferrer" title="GitHub">
             <Icon icon="mdi:github" width="22" height="22" />
           </a>
+          <a href="http://www.linkedin.com/in/pramuditha-nadun-612b1b204" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+            <Icon icon="mdi:linkedin" width="22" height="22" />
+          </a>
           <a href="https://www.instagram.com/pramx.psd?igsh=MWNtaXF2cWw2ajEwcg==" target="_blank" rel="noopener noreferrer" title="Instagram">
             <Icon icon="mdi:instagram" width="22" height="22" />
           </a>
           <a href="https://web.facebook.com/pramuditha.nadun" target="_blank" rel="noopener noreferrer" title="Facebook">
             <Icon icon="mdi:facebook" width="22" height="22" />
           </a>
-          <a href="https://www.behance.net" target="_blank" rel="noopener noreferrer" title="Behance">
+          <a href="https://www.behance.net/pramudithanadun1" target="_blank" rel="noopener noreferrer" title="Behance">
             <Icon icon="simple-icons:behance" width="22" height="22" />
           </a>
-          <a href="https://www.pinterest.com" target="_blank" rel="noopener noreferrer" title="Pinterest">
+          <a href="https://pin.it/Lb92N4TnM" target="_blank" rel="noopener noreferrer" title="Pinterest">
             <Icon icon="mdi:pinterest" width="22" height="22" />
           </a>
           <a href="mailto:pramudithanadun9@gmail.com" target="_blank" rel="noopener noreferrer" title="Email">
@@ -1114,6 +1117,15 @@ export default function App() {
                 <Icon icon="mdi:github" width="24" height="24" />
               </a>
               <a 
+                href="http://www.linkedin.com/in/pramuditha-nadun-612b1b204" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="footer-link"
+                title="LinkedIn"
+              >
+                <Icon icon="mdi:linkedin" width="24" height="24" />
+              </a>
+              <a 
                 href="https://www.instagram.com/pramx.psd?igsh=MWNtaXF2cWw2ajEwcg==" 
                 target="_blank" 
                 rel="noopener noreferrer" 
@@ -1132,7 +1144,7 @@ export default function App() {
                 <Icon icon="mdi:facebook" width="24" height="24" />
               </a>
               <a 
-                href="https://www.behance.net" 
+                href="https://www.behance.net/pramudithanadun1" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="footer-link"
@@ -1141,7 +1153,7 @@ export default function App() {
                 <Icon icon="simple-icons:behance" width="24" height="24" />
               </a>
               <a 
-                href="https://www.pinterest.com" 
+                href="https://pin.it/Lb92N4TnM" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="footer-link"
@@ -1150,7 +1162,7 @@ export default function App() {
                 <Icon icon="mdi:pinterest" width="24" height="24" />
               </a>
               <a 
-                href="mailto:pramudithanadun9@gmail.com" 
+                href="mailto:pramudithanadun@gmail.com" 
                 className="footer-link"
                 title="Email"
               >
