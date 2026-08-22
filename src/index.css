@@ -2194,29 +2194,272 @@ body {
 }
 
 /* Pinterest pins — Instagram-style grid */
+
+/* ── Gallery filter tab bar ─────────────────────────────────── */
+.gallery-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.gallery-filter-tab {
+  padding: 0.35rem 1rem;
+  border-radius: 20px;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.6);
+  color: rgba(0, 0, 0, 0.55);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gallery-filter-tab:hover {
+  border-color: rgba(229, 29, 29, 0.35);
+  color: var(--accent-red);
+}
+
+.gallery-filter-tab.active {
+  background: var(--accent-red);
+  border-color: var(--accent-red);
+  color: #fff;
+}
+
+/* ── Image grid ─────────────────────────────────────────────── */
 .showcase-instagram-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.3rem;
   width: 100%;
+  margin-bottom: 0.5rem;
 }
 
 .showcase-grid-post {
+  position: relative;
   aspect-ratio: 1 / 1;
   overflow: hidden;
   background: rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  outline: none;
+}
+
+/* Skeleton shimmer inside each cell before the image loads */
+.grid-img-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.06) 25%,
+    rgba(0, 0, 0, 0.11) 50%,
+    rgba(0, 0, 0, 0.06) 75%
+  );
+  background-size: 200% 100%;
+  animation: gridShimmer 1.4s infinite;
+}
+
+@keyframes gridShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .showcase-grid-post img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s ease;
+  opacity: 0;
+  transition: opacity 0.35s ease, transform 0.4s ease;
 }
 
-.showcase-grid-post:hover img {
-  transform: scale(1.05);
+/* Fade image in once loaded */
+.showcase-grid-post.grid-img-ready img {
+  opacity: 1;
+}
+
+.showcase-grid-post:hover img,
+.showcase-grid-post:focus img {
+  transform: scale(1.06);
+}
+
+/* Hover zoom icon overlay */
+.grid-img-hover-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.32);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  pointer-events: none;
+}
+
+.showcase-grid-post:hover .grid-img-hover-icon,
+.showcase-grid-post:focus .grid-img-hover-icon {
+  opacity: 1;
+}
+
+/* Broken image cell */
+.grid-img-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: rgba(0, 0, 0, 0.2);
+}
+
+/* Empty state */
+.gallery-empty {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 3rem 1rem;
+  color: rgba(0, 0, 0, 0.35);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  justify-content: center;
+}
+
+.gallery-empty svg {
+  font-size: 1.8rem;
+}
+
+/* ── Lightbox ────────────────────────────────────────────────── */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: lbFadeIn 0.2s ease;
+}
+
+@keyframes lbFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.lightbox-img-wrap {
+  position: relative;
+  max-width: 90vw;
+  max-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-img-skeleton {
+  width: 60vw;
+  height: 60vh;
+  border-radius: 8px;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.05) 25%,
+    rgba(255,255,255,0.1) 50%,
+    rgba(255,255,255,0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: gridShimmer 1.4s infinite;
+}
+
+.lightbox-img {
+  max-width: 90vw;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: block;
+}
+
+.lightbox-img.lightbox-img-ready {
+  opacity: 1;
+}
+
+.lightbox-close {
+  position: fixed;
+  top: 1.2rem;
+  right: 1.4rem;
+  z-index: 10001;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.lightbox-close:hover {
+  background: rgba(255,255,255,0.22);
+}
+
+.lightbox-counter {
+  position: fixed;
+  top: 1.3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.6);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
+
+.lightbox-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10001;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.lightbox-nav:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.lightbox-prev { left: 1.2rem; }
+.lightbox-next { right: 1.2rem; }
+
+@media (max-width: 640px) {
+  .showcase-instagram-grid {
+    gap: 0.15rem;
+  }
+  .lightbox-nav {
+    width: 2.4rem;
+    height: 2.4rem;
+    font-size: 1.2rem;
+  }
+  .lightbox-prev { left: 0.5rem; }
+  .lightbox-next { right: 0.5rem; }
 }
 
 /* Section break between the feed and the video editing cards */
@@ -2231,6 +2474,286 @@ body {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--accent-red);
+}
+
+/* ============================================
+   PIN BOARD (Aesthetics page — Pinterest grid)
+   ============================================ */
+
+/* Board header + search */
+.pin-board-header {
+  width: 100%;
+  max-width: 950px;
+  margin-bottom: 2rem;
+}
+
+.pin-board-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.pin-board-icon {
+  font-size: 1.5rem;
+  color: #e60023;
+}
+
+.pin-board-subtitle {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.45);
+  font-family: var(--font-sans);
+  margin: 0 0 1.4rem;
+}
+
+/* Search bar */
+.pin-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  border-radius: 40px;
+  padding: 0.55rem 1rem;
+  max-width: 460px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pin-search-bar:focus-within {
+  border-color: #e60023;
+  box-shadow: 0 0 0 3px rgba(230, 0, 35, 0.1);
+}
+
+.pin-search-icon {
+  font-size: 1.05rem;
+  color: rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+
+.pin-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: #171719;
+}
+
+.pin-search-input::placeholder {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.pin-search-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.4);
+  padding: 0;
+  font-size: 1rem;
+  transition: color 0.15s ease;
+}
+
+.pin-search-clear:hover {
+  color: #e60023;
+}
+
+/* Masonry grid */
+.pin-masonry-grid {
+  width: 100%;
+  max-width: 950px;
+  columns: 4;
+  column-gap: 0.75rem;
+  margin-bottom: 3rem;
+}
+
+/* Skeleton loader cards */
+.pin-skeleton {
+  break-inside: avoid;
+  display: block;
+  width: 100%;
+  margin-bottom: 0.75rem;
+  border-radius: 16px;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.06) 25%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.06) 75%
+  );
+  background-size: 200% 100%;
+  animation: pinShimmer 1.4s infinite;
+}
+
+@keyframes pinShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Pin card */
+.pin-card {
+  break-inside: avoid;
+  position: relative;
+  margin-bottom: 0.75rem;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+/* skeleton inside card while image loads */
+.pin-img-skeleton {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.06) 25%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.06) 75%
+  );
+  background-size: 200% 100%;
+  animation: pinShimmer 1.4s infinite;
+  z-index: 1;
+}
+
+.pin-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.pin-card.pin-loaded .pin-img {
+  opacity: 1;
+}
+
+/* Hover overlay with title + category */
+.pin-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.2rem;
+  padding: 0.75rem 0.8rem;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 3;
+}
+
+.pin-card:hover .pin-overlay,
+.pin-card:focus-within .pin-overlay {
+  opacity: 1;
+}
+
+.pin-title {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.pin-category {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Error state */
+.pin-img-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 140px;
+  color: rgba(0, 0, 0, 0.25);
+  font-size: 2rem;
+}
+
+/* Empty search state */
+.pin-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 4rem 1rem;
+  color: rgba(0, 0, 0, 0.4);
+  font-family: var(--font-sans);
+  text-align: center;
+}
+
+.pin-empty-icon {
+  font-size: 3rem;
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.pin-empty-state p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.pin-clear-btn,
+.pin-fallback-notice {
+  font-family: var(--font-sans);
+}
+
+.pin-clear-btn {
+  padding: 0.4rem 1.1rem;
+  border-radius: 20px;
+  border: 1.5px solid rgba(230, 0, 35, 0.4);
+  background: transparent;
+  color: #e60023;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.pin-clear-btn:hover {
+  background: #e60023;
+  color: #fff;
+}
+
+.pin-fallback-notice {
+  font-size: 0.72rem;
+  color: rgba(0, 0, 0, 0.35);
+  text-align: center;
+  margin-top: -1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Responsive columns */
+@media (max-width: 900px) {
+  .pin-masonry-grid {
+    columns: 3;
+  }
+}
+
+@media (max-width: 600px) {
+  .pin-masonry-grid {
+    columns: 2;
+  }
+  .pin-search-bar {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .pin-masonry-grid {
+    columns: 1;
+  }
 }
 
 .showcase-section-break::before,
@@ -3181,8 +3704,10 @@ body {
 
 .repo-footer {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  gap: 0.4rem;
   font-size: 0.7rem;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   padding-top: 0.8rem;
@@ -3272,6 +3797,59 @@ body {
 .repo-lang-badge.lang-kotlin { background-color: rgba(168, 85, 247, 0.12); color: #6b21a8; border: 1px solid rgba(168, 85, 247, 0.2); }
 .repo-lang-badge.lang-astro { background-color: rgba(236, 72, 153, 0.12); color: #9d174d; border: 1px solid rgba(236, 72, 153, 0.2); }
 .repo-lang-badge.lang-default { background-color: rgba(107, 114, 128, 0.12); color: #374151; border: 1px solid rgba(107, 114, 128, 0.2); }
+
+/* Repo topic tags */
+.repo-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.85rem;
+}
+
+.repo-topic-tag {
+  padding: 0.2rem 0.55rem;
+  border-radius: 20px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  background-color: rgba(229, 29, 29, 0.08);
+  color: #b91c1c;
+  border: 1px solid rgba(229, 29, 29, 0.22);
+  letter-spacing: 0.01em;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.repo-topic-tag:hover {
+  background-color: rgba(229, 29, 29, 0.15);
+  color: #991b1b;
+  border-color: rgba(229, 29, 29, 0.35);
+}
+
+/* MIT License badge */
+.repo-license-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  background-color: rgba(22, 163, 74, 0.1);
+  color: #15803d;
+  border: 1px solid rgba(22, 163, 74, 0.2);
+}
+
+.repo-license-badge svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.repo-card.featured .repo-license-badge {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.75);
+  border-color: rgba(255, 255, 255, 0.2);
+}
 
 /* Beyond the Code */
 .beyond-grid {
@@ -3582,3 +4160,198 @@ body {
   border-color: #111111;
 }
 
+/* =====================================================
+   MOBILE-FRIENDLY OVERRIDES (≤ 480px)
+   Aesthetics, Logic & shared subpage improvements
+   ===================================================== */
+@media (max-width: 480px) {
+
+  /* ── Subpage padding ─────────────────────────────── */
+  .subpage-scroll-content {
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  /* ── Header row ──────────────────────────────────── */
+  .top-header-row {
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── Titles ──────────────────────────────────────── */
+  .subpage-title {
+    font-size: clamp(1.9rem, 10vw, 2.6rem);
+    margin-top: 1.5rem;
+    margin-bottom: 0.35rem;
+    text-align: center;
+  }
+
+  .subpage-subtitle {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── Gallery filter tabs — single scrollable row ── */
+  .gallery-filter-bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0.4rem;
+    padding-bottom: 0.25rem;
+    margin-bottom: 0.75rem;
+    /* fade edge so it's obvious it scrolls */
+    -webkit-mask-image: linear-gradient(90deg, #000 80%, transparent 100%);
+    mask-image: linear-gradient(90deg, #000 80%, transparent 100%);
+  }
+
+  .gallery-filter-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery-filter-tab {
+    flex-shrink: 0;
+    padding: 0.32rem 0.9rem;
+    font-size: 0.7rem;
+  }
+
+  /* ── Image grid — 2 cols on narrow phones ─────────── */
+  .showcase-instagram-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.2rem;
+  }
+
+  /* ── Section divider spacing ─────────────────────── */
+  .section-divider {
+    margin: 2.5rem auto;
+  }
+
+  /* ── Section title ───────────────────────────────── */
+  .section-title {
+    font-size: 1.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  /* ── Work cards ──────────────────────────────────── */
+  .work-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .work-card {
+    padding: 1.2rem;
+  }
+
+  /* ── Repo cards ──────────────────────────────────── */
+  .repos-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .repo-card {
+    padding: 1.2rem;
+    min-height: unset;
+  }
+
+  .repo-name {
+    font-size: 0.9rem;
+  }
+
+  .repo-desc {
+    font-size: 0.75rem;
+  }
+
+  /* ── Repo footer: stack vertically on tiny screens ── */
+  .repo-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  /* ── Repo tags — scrollable row ─────────────────── */
+  .repo-tags {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.15rem;
+  }
+
+  .repo-tags::-webkit-scrollbar { display: none; }
+
+  /* ── Actions row ─────────────────────────────────── */
+  .repo-actions {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .repo-action {
+    font-size: 0.65rem;
+    padding: 0.45rem 0.65rem;
+  }
+
+  /* ── Beyond the code cards ───────────────────────── */
+  .beyond-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .beyond-card {
+    min-height: unset;
+    padding: 1.2rem;
+  }
+
+  /* ── Testimonials ────────────────────────────────── */
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .testimonial-card {
+    padding: 1.2rem;
+  }
+
+  /* ── Video showcase section break ────────────────── */
+  .showcase-section-break {
+    margin: 2rem 0 1.5rem;
+    font-size: 0.65rem;
+  }
+
+  /* ── Lightbox nav arrows — keep accessible ───────── */
+  .lightbox-prev { left: 0.35rem; }
+  .lightbox-next { right: 0.35rem; }
+
+  /* ── Pin search bar — full width ─────────────────── */
+  .pin-search-bar {
+    max-width: 100%;
+  }
+
+  /* ── Scroll-to-top button ────────────────────────── */
+  .subpage-scroll-top-btn {
+    bottom: 1rem;
+    right: 1rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    font-size: 1rem;
+  }
+}
+
+/* ── Extra-small phones (≤ 360px) ──────────────────── */
+@media (max-width: 360px) {
+  .subpage-scroll-content {
+    padding: 1.25rem 0.75rem 4rem;
+  }
+
+  .showcase-instagram-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .subpage-title {
+    font-size: clamp(1.65rem, 11vw, 2.2rem);
+  }
+
+  .gallery-filter-tab {
+    padding: 0.28rem 0.75rem;
+    font-size: 0.65rem;
+  }
+}

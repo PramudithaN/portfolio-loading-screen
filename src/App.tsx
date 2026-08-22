@@ -179,7 +179,9 @@ export default function App() {
           stargazers_count: 0,
           forks_count: 0,
           updated_at: "2026-06-15T13:54:16Z",
-          language: "Python"
+          language: "Python",
+          topics: ["python", "elevenlabs", "automation", "localization"],
+          license: null
         },
         {
           name: "petrocast-backend",
@@ -188,7 +190,9 @@ export default function App() {
           stargazers_count: 2,
           forks_count: 0,
           updated_at: "2026-07-25T17:09:02Z",
-          language: "Python"
+          language: "Python",
+          topics: ["fastapi", "machine-learning", "forecasting", "arima", "gru"],
+          license: { key: "mit", name: "MIT License" }
         },
         {
           name: "digital-wedding-invitation",
@@ -197,7 +201,9 @@ export default function App() {
           stargazers_count: 0,
           forks_count: 0,
           updated_at: "2026-08-20T03:22:57Z",
-          language: "TypeScript"
+          language: "TypeScript",
+          topics: ["react", "framer-motion", "tailwindcss", "wedding"],
+          license: { key: "mit", name: "MIT License" }
         }
       ];
 
@@ -214,7 +220,9 @@ export default function App() {
       ];
 
       try {
-        const res = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
+        const res = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`, {
+          headers: { Accept: 'application/vnd.github.mercy-preview+json' }
+        });
         if (res.ok) {
           const rawRepos = await res.json();
           if (Array.isArray(rawRepos)) {
@@ -722,10 +730,22 @@ export default function App() {
                     </div>
                   </div>
                   <p className="repo-desc">{repo.description}</p>
+                  {(repo.topics?.length > 0) && (
+                    <div className="repo-tags">
+                      {repo.topics.map((topic: string) => (
+                        <span key={topic} className="repo-topic-tag">{topic}</span>
+                      ))}
+                    </div>
+                  )}
                   <div className="repo-footer">
                     {repo.language && (
                       <span className={`repo-lang-badge ${langClass}`}>
                         {repo.language}
+                      </span>
+                    )}
+                    {repo.license?.key === 'mit' && (
+                      <span className="repo-license-badge">
+                        <Icon icon="mdi:scale-balance" /> MIT License
                       </span>
                     )}
                     <span className="repo-updated">
@@ -773,10 +793,22 @@ export default function App() {
                       </div>
                     </div>
                     <p className="repo-desc">{repo.description}</p>
+                    {(repo.topics?.length > 0) && (
+                      <div className="repo-tags">
+                        {repo.topics.map((topic: string) => (
+                          <span key={topic} className="repo-topic-tag">{topic}</span>
+                        ))}
+                      </div>
+                    )}
                     <div className="repo-footer">
                       {repo.language && (
                         <span className={`repo-lang-badge ${langClass}`}>
                           {repo.language}
+                        </span>
+                      )}
+                      {repo.license?.key === 'mit' && (
+                        <span className="repo-license-badge">
+                          <Icon icon="mdi:scale-balance" /> MIT License
                         </span>
                       )}
                       <span className="repo-updated">
@@ -913,8 +945,8 @@ export default function App() {
         </div>
 
         {/* Subpage Intro */}
-        <h1 className="subpage-title">Aesthetics & Motion</h1>
-        <p className="subpage-subtitle">Graphic Design & Cinematography</p>
+        <h1 className="subpage-title">Aesthetics &amp; Motion</h1>
+        <p className="subpage-subtitle">Graphic Design &amp; Cinematography</p>
 
         {/* Video Showcase: Graphic Design / Video Editing reels */}
         <VideoShowcase />

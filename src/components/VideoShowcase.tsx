@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { Icon } from '@iconify/react'
 
 interface ShowcaseReel {
@@ -16,6 +17,19 @@ interface ShowcaseReel {
 
 const PINTEREST_USERNAME = 'ad0bep'
 const BOARD_NAMES = ['all-pins', 'manipulations', 'flyers', 'social']
+
+// Category labels for the filter tabs
+const CATEGORY_LABELS: Record<string, string> = {
+  'all-pins': 'All',
+  'manipulations': 'Manipulations',
+  'flyers': 'Flyers',
+  'social': 'Social',
+}
+
+interface GalleryImage {
+  src: string
+  board: string
+}
 
 const videoReels: ShowcaseReel[] = [
   {
@@ -80,61 +94,234 @@ const videoReels: ShowcaseReel[] = [
   },
 ]
 
+// ── Single grid image with its own skeleton + lazy load ──────────────────────
+function GridImage({
+  src,
+  alt,
+  onClick,
+}: {
+  src: string
+  alt: string
+  onClick: () => void
+}) {
+  const [loaded, setLoaded] = useState(false)
+  const [errored, setErrored] = useState(false)
+
+  return (
+    <div
+      className={`showcase-grid-post${loaded ? ' grid-img-ready' : ''}`}
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={e => e.key === 'Enter' && onClick()}
+      aria-label={`View ${alt}`}
+    >
+      {!loaded && !errored && <div className="grid-img-skeleton" />}
+      {!errored ? (
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          onLoad={() => setLoaded(true)}
+          onError={() => { setLoaded(true); setErrored(true) }}
+        />
+      ) : (
+        <div className="grid-img-error">
+          <Icon icon="mdi:image-broken-variant" />
+        </div>
+      )}
+      <div className="grid-img-hover-icon">
+        <Icon icon="mdi:magnify-plus-outline" />
+      </div>
+    </div>
+  )
+}
+
+// ── Lightbox ─────────────────────────────────────────────────────────────────
+function Lightbox({
+  images,
+  startIndex,
+  onClose,
+}: {
+  images: GalleryImage[]
+  startIndex: number
+  onClose: () => void
+}) {
+  const [current, setCurrent] = useState(startIndex)
+  const [imgLoaded, setImgLoaded] = useState(false)
+
+  const prev = useCallback(() => {
+    setImgLoaded(false)
+    setCurrent(i => (i - 1 + images.length) % images.length)
+  }, [images.length])
+
+  const next = useCallback(() => {
+    setImgLoaded(false)
+    setCurrent(i => (i + 1) % images.length)
+  }, [images.length])
+
+  // Keyboard navigation + Escape to close
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowLeft') prev()
+      if (e.key === 'ArrowRight') next()
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [onClose, prev, next])
+
+  // Lock ALL scroll containers while lightbox is open, preserving scroll position
+  useEffect(() => {
+    const prevBodyOverflow = document.body.style.overflow
+    const prevHtmlOverflow = document.documentElement.style.overflow
+    const subpage = document.querySelector<HTMLElement>('.subpage-container')
+    const prevSubpageOverflow = subpage ? subpage.style.overflow : ''
+    const savedScrollTop = subpage ? subpage.scrollTop : 0
+
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+    if (subpage) {
+      subpage.style.overflow = 'hidden'
+      // Restoring scrollTop after hiding overflow keeps the visual position intact
+      subpage.scrollTop = savedScrollTop
+    }
+
+    return () => {
+      document.body.style.overflow = prevBodyOverflow
+      document.documentElement.style.overflow = prevHtmlOverflow
+      if (subpage) {
+        subpage.style.overflow = prevSubpageOverflow
+        subpage.scrollTop = savedScrollTop
+      }
+    }
+  }, [])
+
+  return createPortal(
+    <div className="lightbox-overlay" onClick={onClose} aria-modal="true" role="dialog">
+      {/* Close */}
+      <button
+        type="button"
+        className="lightbox-close"
+        onClick={onClose}
+        aria-label="Close"
+      >
+        <Icon icon="mdi:close" />
+      </button>
+
+      {/* Counter */}
+      <div className="lightbox-counter">
+        {current + 1} / {images.length}
+      </div>
+
+      {/* Prev */}
+      {images.length > 1 && (
+        <button
+          type="button"
+          className="lightbox-nav lightbox-prev"
+          onClick={e => { e.stopPropagation(); prev() }}
+          aria-label="Previous image"
+        >
+          <Icon icon="mdi:chevron-left" />
+        </button>
+      )}
+
+      {/* Image */}
+      <div className="lightbox-img-wrap" onClick={e => e.stopPropagation()}>
+        {!imgLoaded && <div className="lightbox-img-skeleton" />}
+        <img
+          key={images[current].src}
+          src={images[current].src}
+          alt=""
+          className={`lightbox-img${imgLoaded ? ' lightbox-img-ready' : ''}`}
+          onLoad={() => setImgLoaded(true)}
+          onError={() => setImgLoaded(true)}
+        />
+      </div>
+
+      {/* Next */}
+      {images.length > 1 && (
+        <button
+          type="button"
+          className="lightbox-nav lightbox-next"
+          onClick={e => { e.stopPropagation(); next() }}
+          aria-label="Next image"
+        >
+          <Icon icon="mdi:chevron-right" />
+        </button>
+      )}
+    </div>,
+    document.body
+  )
+}
+
+// ── Main component ────────────────────────────────────────────────────────────
 export default function VideoShowcase() {
   const [activeVideoIndex, setActiveVideoIndex] = useState(0)
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
 
   const activeVideo = videoReels[activeVideoIndex]
 
- const [galleryImages, setGalleryImages] = useState<string[]>([])
+  // Gallery state: per-board images + loading map
+  const [allImages, setAllImages] = useState<GalleryImage[]>([])
+  const [loadingBoards, setLoadingBoards] = useState<Record<string, boolean>>(
+    Object.fromEntries(BOARD_NAMES.map(b => [b, true]))
+  )
+  const [activeCategory, setActiveCategory] = useState<string>('all-pins')
 
-useEffect(() => {
-  const fetchPinterestImages = async () => {
-    const fetchedImages: string[] = []
+  // Lightbox state
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [lightboxStart, setLightboxStart] = useState(0)
 
-    for (const board of BOARD_NAMES) {
-      // Use 'feed' for all pins, otherwise use the specific board name
+  useEffect(() => {
+    const fetchBoard = async (board: string) => {
       const rssName = board === 'all-pins' ? 'feed' : board
       const rawUrl = `https://www.pinterest.com/${PINTEREST_USERNAME}/${rssName}.rss`
-      
-      // rss2json avoids the 500 Internal Server errors you were getting
       const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rawUrl)}`
 
       try {
         const res = await fetch(proxyUrl)
-        if (!res.ok) continue
-        
+        if (!res.ok) return
         const data = await res.json()
+        if (data.status !== 'ok') return
 
-        if (data.status !== 'ok') {
-          console.warn(`[${board}] Failed to load RSS:`, data.message)
-          continue
-        }
-
+        const imgs: GalleryImage[] = []
         data.items.forEach((item: any) => {
-          // Improved regex to grab the image src reliably
-          const imgSrcMatch = item.description.match(/<img[^>]+src=["']([^"']+)["']/i)
-
-          if (imgSrcMatch) {
-            let src = imgSrcMatch[1]
-            // Upgrade image resolution to high-quality original
-            src = src.replace(/\/\d+x\//, '/originals/')
-            fetchedImages.push(src)
+          const match = item.description.match(/<img[^>]+src=["']([^"']+)["']/i)
+          if (match) {
+            const src = match[1].replace(/\/\d+x\//, '/originals/')
+            imgs.push({ src, board })
           }
         })
-      } catch (error) {
-        console.error(`[${board}] Failed to fetch feed:`, error)
+
+        setAllImages(prev => {
+          const existing = new Set(prev.map(i => i.src))
+          const fresh = imgs.filter(i => !existing.has(i.src))
+          return [...prev, ...fresh]
+        })
+      } catch {
+        // silently ignore per-board errors
+      } finally {
+        setLoadingBoards(prev => ({ ...prev, [board]: false }))
       }
     }
 
-    if (fetchedImages.length > 0) {
-      // Use a Set to strip out any duplicate pins shared across boards
-      setGalleryImages([...new Set(fetchedImages)])
-    }
-  }
+    BOARD_NAMES.forEach(fetchBoard)
+  }, [])
 
-  fetchPinterestImages()
-}, [])
+  const isLoading = Object.values(loadingBoards).some(Boolean)
+
+  // Filtered images for the active category tab
+  const filteredImages =
+    activeCategory === 'all-pins'
+      ? allImages
+      : allImages.filter(img => img.board === activeCategory)
+
+  const openLightbox = (index: number) => {
+    setLightboxStart(index)
+    setLightboxOpen(true)
+  }
 
   const selectVideoReel = (index: number) => {
     if (index === activeVideoIndex) return
@@ -182,23 +369,55 @@ useEffect(() => {
 
   const handleVideoTouchEnd = () => {
     const diff = videoTouchStartX.current - videoTouchEndX.current
-    const threshold = 50
-    if (Math.abs(diff) > threshold) {
-      scrollVideoRelated(diff > 0 ? 'right' : 'left')
-    }
+    if (Math.abs(diff) > 50) scrollVideoRelated(diff > 0 ? 'right' : 'left')
   }
 
   return (
     <div className="video-showcase">
-      {/* Pinterest pins — Instagram-style grid */}
-      <div className="showcase-instagram-grid">
-        {galleryImages.map((src, index) => (
-          <div className="showcase-grid-post" key={index}>
-            <img src={src} alt="" loading="lazy" />
-          </div>
+
+      {/* ── Category filter tabs ─────────────────────────────────────── */}
+      <div className="gallery-filter-bar">
+        {BOARD_NAMES.map(board => (
+          <button
+            key={board}
+            type="button"
+            className={`gallery-filter-tab${activeCategory === board ? ' active' : ''}`}
+            onClick={() => setActiveCategory(board)}
+          >
+            {CATEGORY_LABELS[board]}
+          </button>
         ))}
       </div>
 
+      {/* ── Pinterest image grid ─────────────────────────────────────── */}
+      {isLoading && filteredImages.length === 0 ? (
+        // Full skeleton grid while all boards are still loading
+        <div className="showcase-instagram-grid">
+          {Array.from({ length: 9 }).map((_, i) => (
+            <div key={i} className="showcase-grid-post">
+              <div className="grid-img-skeleton" />
+            </div>
+          ))}
+        </div>
+      ) : filteredImages.length === 0 ? (
+        <div className="gallery-empty">
+          <Icon icon="mdi:image-off-outline" />
+          <span>No images in this category yet</span>
+        </div>
+      ) : (
+        <div className="showcase-instagram-grid">
+          {filteredImages.map((img, i) => (
+            <GridImage
+              key={img.src}
+              src={img.src}
+              alt={CATEGORY_LABELS[img.board]}
+              onClick={() => openLightbox(i)}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* ── Video editing section ────────────────────────────────────── */}
       <div className="showcase-section-break">
         <span>Video Editing</span>
       </div>
@@ -240,7 +459,6 @@ useEffect(() => {
             <>
               <img className="showcase-thumbnail" src={activeVideo.thumbnail} alt={activeVideo.title} />
               <div className="showcase-overlay-gradient" />
-
               <div className="showcase-play-wrap">
                 <span className="showcase-duration">{activeVideo.duration}</span>
                 <button
@@ -304,6 +522,15 @@ useEffect(() => {
           </div>
         </div>
       </div>
+
+      {/* ── Lightbox ─────────────────────────────────────────────────── */}
+      {lightboxOpen && (
+        <Lightbox
+          images={filteredImages}
+          startIndex={lightboxStart}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
     </div>
   )
 }
