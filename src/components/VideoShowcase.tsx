@@ -533,6 +533,38 @@ export default function VideoShowcase() {
         </div>
       </div>
 
+      {/* ── Tools & Software Section ────────────────────────────────────── */}
+      <div className="showcase-section-break" style={{ marginTop: '4rem' }}>
+        <span>Software & Tools</span>
+      </div>
+      
+      <div className="skills-gallery" style={{ marginTop: '2.5rem', marginBottom: '2rem' }}>
+        <div className="skills-gallery-item">
+          <Icon icon="simple-icons:adobephotoshop" className="skills-gallery-icon" />
+          <span className="skills-gallery-text">Photoshop</span>
+        </div>
+        <div className="skills-gallery-item">
+          <Icon icon="simple-icons:adobeillustrator" className="skills-gallery-icon" />
+          <span className="skills-gallery-text">Illustrator</span>
+        </div>
+        <div className="skills-gallery-item">
+          <Icon icon="simple-icons:adobeaftereffects" className="skills-gallery-icon" />
+          <span className="skills-gallery-text">After Effects</span>
+        </div>
+        <div className="skills-gallery-item">
+          <Icon icon="simple-icons:adobepremierepro" className="skills-gallery-icon" />
+          <span className="skills-gallery-text">Premiere Pro</span>
+        </div>
+        <div className="skills-gallery-item">
+          <Icon icon="simple-icons:adobelightroom" className="skills-gallery-icon" />
+          <span className="skills-gallery-text">Lightroom</span>
+        </div>
+        <div className="skills-gallery-item">
+          <Icon icon="thesvg:capcut" className="skills-gallery-icon" />
+          <span className="skills-gallery-text">CapCut</span>
+        </div>
+      </div>
+
       {/* ── Lightbox ─────────────────────────────────────────────────── */}
       {lightboxOpen && (
         <Lightbox

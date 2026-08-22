@@ -4336,6 +4336,7 @@ body {
     font-size: 0.65rem;
   }
 
+
   /* ── Lightbox nav arrows — keep accessible ───────── */
   .lightbox-prev { left: 0.35rem; }
   .lightbox-next { right: 0.35rem; }
