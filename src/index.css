@@ -969,6 +969,7 @@ body {
   max-width: 60%;
   height: 50px;
   object-fit: contain;
+  object-position: left center;
   border-radius: 4px;
   margin: 0.85rem 0;
 }
