@@ -375,6 +375,11 @@ export default function VideoShowcase() {
   return (
     <div className="video-showcase">
 
+      {/* ── Graphic Design Description ───────────────────────────────── */}
+      <p className="showcase-intro">
+       I'm Pramuditha Nadun, a graphic designer with a Fiverr journey that began in 2020. Since then, I've helped clients bring their visions to life through detailed Photoshop editing, distinctive logo design, and end-to-end graphic design work turning simple briefs into visuals that leave an impression.
+      </p>
+
       {/* ── Category filter tabs ─────────────────────────────────────── */}
       <div className="gallery-filter-bar">
         {BOARD_NAMES.map(board => (
@@ -421,8 +426,13 @@ export default function VideoShowcase() {
       <div className="showcase-section-break">
         <span>Video Editing</span>
       </div>
+      
+      <p className="showcase-intro">
+      Alongside design, I work as a video editor skilled in After Effects, Premiere Pro, and CapCut. My focus lies in VFX, short-form content, and cinematic edits crafting videos that don't just look good, but hold attention and tell a story.
+      </p>
 
       <div className="showcase-hero">
+
         <div className="showcase-media-area">
           {isVideoPlaying ? (
             <>

@@ -1846,6 +1846,15 @@ body {
   z-index: 10;
 }
 
+.showcase-intro {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.7);
+  margin-bottom: 2.5rem;
+  text-align: justify;
+}
+
 .showcase-hero {
   position: relative;
   width: 100%;
@@ -2200,8 +2209,9 @@ body {
 .gallery-filter-bar {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2.5rem;
   width: 100%;
 }
 
@@ -4192,15 +4202,23 @@ body {
     margin-bottom: 1.5rem;
   }
 
+  /* ── Intro Text ──────────────────────────────────── */
+  .showcase-intro {
+    font-size: 0.85rem;
+    margin-bottom: 2rem;
+    text-align: justify;
+  }
+
   /* ── Gallery filter tabs — single scrollable row ── */
   .gallery-filter-bar {
     flex-wrap: nowrap;
+    justify-content: center;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     gap: 0.4rem;
     padding-bottom: 0.25rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
     /* fade edge so it's obvious it scrolls */
     -webkit-mask-image: linear-gradient(90deg, #000 80%, transparent 100%);
     mask-image: linear-gradient(90deg, #000 80%, transparent 100%);
